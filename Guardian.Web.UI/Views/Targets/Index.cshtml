@@ -1,0 +1,21 @@
+﻿@model Guardian.Domain.QueryListResult<Guardian.Domain.Target.TargetDto>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Targets</h1>
+    <hr />
+    <div>
+        <a class="btn btn-primary" asp-area="" asp-controller="Targets" asp-action="Create">Create</a>
+    </div>
+
+    @if (Model.IsSucceeded && Model.Count > 0)
+    {
+        foreach (var item in Model.Result)
+        {
+            <div>@item.Domain - @item.OriginIpAddress</div>
+        }
+    }
+
+</div>
