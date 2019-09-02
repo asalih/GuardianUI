@@ -20,7 +20,10 @@ namespace Guardian.Infrastructure.Data
         {
             modelBuilder.Entity<Target>(b =>
             {
-                b.HasKey(t => new { t.Id, t.Domain });
+                b.HasKey(t => t.Id);
+
+                b.HasIndex(s => s.Domain)
+                    .IsUnique(true);
 
                 b.HasOne(t => t.Account)
                     .WithMany(acc => acc.Targets)

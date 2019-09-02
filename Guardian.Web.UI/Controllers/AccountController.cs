@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Guardian.Domain.Account;
-using Guardian.Domain.Security.Specs;
+using Guardian.Infrastructure.Security.Specs;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -10,7 +10,7 @@ using static Guardian.Domain.Account.SignUp;
 
 namespace Guardian.Web.UI.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly IMediator _mediator;
         private readonly IIdentityHelper _identityHelper;

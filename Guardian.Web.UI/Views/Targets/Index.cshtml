@@ -9,13 +9,43 @@
     <div>
         <a class="btn btn-primary" asp-area="" asp-controller="Targets" asp-action="Create">Create</a>
     </div>
-
+    <br />
     @if (Model.IsSucceeded && Model.Count > 0)
     {
-        foreach (var item in Model.Result)
-        {
-            <div>@item.Domain - @item.OriginIpAddress</div>
-        }
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Domain
+                    </th>
+                    <th>
+                        Origin IP Address
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Result)
+                {
+                    <tr>
+                        <td>
+                            @item.Domain
+                        </td>
+                        <td>
+                            @item.OriginIpAddress
+                        </td>
+                        <td>
+                            <form asp-action="Delete">
+                                @Html.Hidden("id", item.Id)
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
     }
 
 </div>

@@ -11,7 +11,5 @@ namespace Guardian.Infrastructure.Entity.Specs
         string CertKey { get; set; }
 
         string CertCrt { get; set; }
-
-        Guid AccountId { get; set; }
     }
 }

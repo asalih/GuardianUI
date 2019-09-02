@@ -43,6 +43,15 @@
     <div class="container">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
+
+            @if (TempData["Message"] != null)
+            {
+                <div class="alert alert-@TempData["AlertType"] role="alert">
+                    @TempData["Message"]
+                </div>
+                TempData.Clear();
+            }
+
             @RenderBody()
         </main>
     </div>

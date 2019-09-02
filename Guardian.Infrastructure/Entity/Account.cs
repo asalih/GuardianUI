@@ -13,6 +13,8 @@ namespace Guardian.Infrastructure.Entity
 
         public string Salt { get; set; }
 
+        public string Role { get; set; }
+
         [StringLength(50)]
         public string FullName { get; set; }
 

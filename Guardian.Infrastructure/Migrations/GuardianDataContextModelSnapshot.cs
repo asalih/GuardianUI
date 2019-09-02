@@ -34,6 +34,8 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<string>("Password");
 
+                    b.Property<string>("Role");
+
                     b.Property<string>("Salt");
 
                     b.HasKey("Id");
@@ -43,10 +45,8 @@ namespace Guardian.Infrastructure.Migrations
 
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Target", b =>
                 {
-                    b.Property<Guid>("Id");
-
-                    b.Property<string>("Domain")
-                        .HasMaxLength(250);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<Guid>("AccountId");
 
@@ -56,12 +56,19 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt");
 
+                    b.Property<string>("Domain")
+                        .HasMaxLength(250);
+
                     b.Property<string>("OriginIpAddress")
                         .HasMaxLength(250);
 
-                    b.HasKey("Id", "Domain");
+                    b.HasKey("Id");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("Domain")
+                        .IsUnique()
+                        .HasFilter("[Domain] IS NOT NULL");
 
                     b.ToTable("Targets");
                 });

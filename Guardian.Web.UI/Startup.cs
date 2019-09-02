@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -17,10 +13,9 @@ using Guardian.Infrastructure.Data;
 using MediatR;
 using Guardian.Infrastructure.Repository.EF;
 using Guardian.Infrastructure.Repository.Specs;
-using Guardian.Domain.Security.Specs;
-using Guardian.Domain.Security;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
+using Guardian.Infrastructure.Security;
+using Guardian.Infrastructure.Security.Specs;
 
 namespace Guardian.Web.UI
 {
@@ -40,7 +35,6 @@ namespace Guardian.Web.UI
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(DBContextTransactionPipelineBehavior<,>));
 
-            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
             services.AddScoped(typeof(ITargetRepository), typeof(TargetRepository));
             services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
 

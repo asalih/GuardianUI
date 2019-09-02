@@ -24,8 +24,6 @@ namespace Guardian.Domain.Target
         [Display(Name = "Certificate")]
         public string CertCrt { get; set; }
 
-        public Guid AccountId { get; set; }
-
         public DateTimeOffset CreatedAt { get; set; }
     }
 }

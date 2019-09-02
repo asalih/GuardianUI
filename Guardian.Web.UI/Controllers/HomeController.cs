@@ -1,13 +1,10 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Guardian.Web.UI.Models;
-using MediatR;
-using Guardian.Domain.Target;
 
 namespace Guardian.Web.UI.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public HomeController()
         {
@@ -15,6 +12,7 @@ namespace Guardian.Web.UI.Controllers
 
         public IActionResult Index()
         {
+            Alert(AlertTypes.Error, "Error");
             return View();
         }
 

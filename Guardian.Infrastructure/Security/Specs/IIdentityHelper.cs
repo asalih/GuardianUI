@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text;
 
-namespace Guardian.Domain.Security.Specs
+namespace Guardian.Infrastructure.Security.Specs
 {
     public interface IIdentityHelper
     {
@@ -11,6 +13,6 @@ namespace Guardian.Domain.Security.Specs
 
         string GetCurrentUsername();
 
-        Guid GetAccountId();
+        Guid? GetAccountId();
     }
 }

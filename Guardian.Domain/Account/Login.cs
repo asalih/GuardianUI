@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Guardian.Domain.CryptoUtility;
-using Guardian.Domain.Security.Specs;
 using Guardian.Infrastructure.Repository.Specs;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Guardian.Infrastructure.Security.Specs;
 
 namespace Guardian.Domain.Account
 {

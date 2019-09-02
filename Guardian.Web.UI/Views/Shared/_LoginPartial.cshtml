@@ -1,4 +1,4 @@
-﻿@inject Guardian.Domain.Security.Specs.IIdentityHelper IdentityHelper
+﻿@inject Guardian.Infrastructure.Security.Specs.IIdentityHelper IdentityHelper
 
 <ul class="navbar-nav">
     @if (IdentityHelper.GetCurrentIdenity().Identity.IsAuthenticated)

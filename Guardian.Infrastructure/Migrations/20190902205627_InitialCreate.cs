@@ -16,6 +16,7 @@ namespace Guardian.Infrastructure.Migrations
                     Email = table.Column<string>(maxLength: 200, nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Salt = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: true),
                     FullName = table.Column<string>(maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -28,8 +29,8 @@ namespace Guardian.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Domain = table.Column<string>(maxLength: 250, nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false),
+                    Domain = table.Column<string>(maxLength: 250, nullable: true),
                     OriginIpAddress = table.Column<string>(maxLength: 250, nullable: true),
                     CertKey = table.Column<string>(nullable: true),
                     CertCrt = table.Column<string>(nullable: true),
@@ -37,7 +38,7 @@ namespace Guardian.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Targets", x => new { x.Id, x.Domain });
+                    table.PrimaryKey("PK_Targets", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Targets_Account_AccountId",
                         column: x => x.AccountId,
@@ -50,6 +51,13 @@ namespace Guardian.Infrastructure.Migrations
                 name: "IX_Targets_AccountId",
                 table: "Targets",
                 column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Targets_Domain",
+                table: "Targets",
+                column: "Domain",
+                unique: true,
+                filter: "[Domain] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

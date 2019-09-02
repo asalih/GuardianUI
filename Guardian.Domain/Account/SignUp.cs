@@ -3,8 +3,10 @@ using FluentValidation;
 using Guardian.Domain.CryptoUtility;
 using Guardian.Infrastructure.Repository.Specs;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -60,7 +62,7 @@ namespace Guardian.Domain.Account
 
             public async Task<AccountCommandResult> Handle(Command message, CancellationToken cancellationToken)
             {
-                var hasEmail = await _repository.CountWhere(s => s.Email == message.Account.Email) > 0;
+                var hasEmail = await _repository.Query().CountAsync(s => s.Email == message.Account.Email) > 0;
 
                 if (hasEmail)
                 {
@@ -72,6 +74,7 @@ namespace Guardian.Domain.Account
                 }
 
                 var account = _mapper.Map<Infrastructure.Entity.Account>(message.Account);
+                account.Role = "User";
 
                 var salt = CryptoHelper.GenerateSalt();
 

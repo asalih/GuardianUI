@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using Guardian.Infrastructure.Repository.Specs;
-using Guardian.Infrastructure;
 using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
-using Guardian.Domain.Security.Specs;
+using Guardian.Infrastructure.Security.Specs;
 
 namespace Guardian.Domain.Target
 {
@@ -39,9 +38,9 @@ namespace Guardian.Domain.Target
 
             public async Task<CommandResult<TargetDto>> Handle(Command message, CancellationToken cancellationToken)
             {
-                var anyTarget = await _repository.GetByDomain(message.Target.Domain);
+                var anyTarget = await _repository.AnyTargetWithTheDomain(message.Target.Domain);
 
-                if (anyTarget != null)
+                if (anyTarget)
                 {
                     return new CommandResult<TargetDto>()
                     {
@@ -50,8 +49,6 @@ namespace Guardian.Domain.Target
                 }
 
                 var target = _mapper.Map<Infrastructure.Entity.Target>(message.Target);
-
-                target.AccountId = _identityHelper.GetAccountId();
 
                 await _repository.Add(target);
 
