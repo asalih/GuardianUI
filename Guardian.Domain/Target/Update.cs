@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using Guardian.Infrastructure.Repository.Specs;
+using Guardian.Infrastructure.Security.Specs;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Guardian.Infrastructure.Security.Specs;
 
 namespace Guardian.Domain.Target
 {
-    public class Add
+    public class Update
     {
         public class Command : IRequest<CommandResult<TargetDto>>
         {
@@ -19,20 +19,21 @@ namespace Guardian.Domain.Target
         {
             private readonly ITargetRepository _repository;
             private readonly IMapper _mapper;
-            private readonly IIdentityHelper _identityHelper;
 
-            public QueryHandler(ITargetRepository repository, IMapper mapper, IIdentityHelper identityHelper)
+            public QueryHandler(ITargetRepository repository, IMapper mapper)
             {
                 _repository = repository;
                 _mapper = mapper;
-                _identityHelper = identityHelper;
             }
 
             public async Task<CommandResult<TargetDto>> Handle(Command message, CancellationToken cancellationToken)
             {
-                var anyTarget = await _repository.GetTargetWithTheDomain(message.Target.Domain);
+                var theTargetWithDomain = await _repository.GetTargetWithTheDomain(message.Target.Domain);
 
-                if (anyTarget != null)
+                var target = await _repository.GetById(message.Target.Id);
+
+                if(theTargetWithDomain != null && 
+                    theTargetWithDomain.Id != target.Id)
                 {
                     return new CommandResult<TargetDto>()
                     {
@@ -40,9 +41,12 @@ namespace Guardian.Domain.Target
                     };
                 }
 
-                var target = _mapper.Map<Infrastructure.Entity.Target>(message.Target);
+                target.Port = message.Target.Port;
+                target.OriginIpAddress = message.Target.OriginIpAddress;
+                target.CertCrt = message.Target.CertCrt;
+                target.CertKey = message.Target.CertKey;
 
-                await _repository.Add(target);
+                await _repository.Update(target);
 
                 return new CommandResult<TargetDto>()
                 {

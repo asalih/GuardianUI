@@ -26,7 +26,8 @@ namespace Guardian.Infrastructure.Repository.EF
             await Context.SaveChangesAsync();
         }
 
-        public async Task<bool> AnyTargetWithTheDomain(string domain) => await DbSet.CountAsync(s => s.AccountId == AccountId && s.Domain == domain) > 0;
+        public async Task<Target> GetTargetWithTheDomain(string domain) =>
+            await DbSet.FirstOrDefaultAsync(s => s.AccountId == AccountId && s.Domain == domain);
 
         public async Task<Target> FirstOrDefault(Expression<Func<Target, bool>> predicate)
             => await DbSet.Where(s => s.AccountId == AccountId).FirstOrDefaultAsync(predicate);

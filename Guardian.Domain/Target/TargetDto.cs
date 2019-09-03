@@ -25,5 +25,7 @@ namespace Guardian.Domain.Target
         public string CertCrt { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
+
+        public int Port { get; set; }
     }
 }

@@ -22,26 +22,33 @@
                         Origin IP Address
                     </th>
                     <th>
+                        Port
+                    </th>
+                    <th>
                     </th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model.Result)
                 {
-                    <tr>
-                        <td>
-                            @item.Domain
-                        </td>
-                        <td>
-                            @item.OriginIpAddress
-                        </td>
-                        <td>
-                            <form asp-action="Delete">
-                                @Html.Hidden("id", item.Id)
-                                <button class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
+                <tr>
+                    <td>
+                        @item.Domain
+                    </td>
+                    <td>
+                        @item.OriginIpAddress
+                    </td>
+                    <td>
+                        @item.Port
+                    </td>
+                    <td>
+                        <form asp-action="Delete">
+                            @Html.Hidden("id", item.Id)
+                            <a class="btn btn-sm btn-info" asp-action="Update" asp-route-id="@item.Id">Update</a>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

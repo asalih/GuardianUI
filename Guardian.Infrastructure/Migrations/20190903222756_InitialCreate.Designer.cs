@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20190902205627_InitialCreate")]
+    [Migration("20190903222756_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,8 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<string>("OriginIpAddress")
                         .HasMaxLength(250);
+
+                    b.Property<int>("Port");
 
                     b.HasKey("Id");
 

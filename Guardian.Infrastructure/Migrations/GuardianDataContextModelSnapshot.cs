@@ -62,6 +62,8 @@ namespace Guardian.Infrastructure.Migrations
                     b.Property<string>("OriginIpAddress")
                         .HasMaxLength(250);
 
+                    b.Property<int>("Port");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");

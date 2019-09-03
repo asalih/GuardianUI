@@ -1,10 +1,11 @@
 ﻿using Guardian.Infrastructure.Entity;
+using System;
 using System.Threading.Tasks;
 
 namespace Guardian.Infrastructure.Repository.Specs
 {
     public interface ITargetRepository : IRepository<Target>
     {
-        Task<bool> AnyTargetWithTheDomain(string domain);
+        Task<Target> GetTargetWithTheDomain(string domain);
     }
 }

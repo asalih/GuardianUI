@@ -34,7 +34,8 @@ namespace Guardian.Infrastructure.Migrations
                     OriginIpAddress = table.Column<string>(maxLength: 250, nullable: true),
                     CertKey = table.Column<string>(nullable: true),
                     CertCrt = table.Column<string>(nullable: true),
-                    AccountId = table.Column<Guid>(nullable: false)
+                    AccountId = table.Column<Guid>(nullable: false),
+                    Port = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

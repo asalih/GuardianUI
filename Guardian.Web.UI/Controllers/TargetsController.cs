@@ -28,9 +28,27 @@ namespace Guardian.Web.UI.Controllers
             return View(result);
         }
 
-        public IActionResult Create(Guid id)
+        public IActionResult Create()
         {
             return View();
+        }
+
+        public async Task<IActionResult> Update(Guid id)
+        {
+            if(id == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var query = await _mediator.Send(new Details.Query(id));
+
+            if(query?.Result == null ||
+                query?.IsSucceeded != true)
+            {
+                return NotFound();
+            }
+
+            return View(query.Result);
         }
 
         [HttpPost]
@@ -51,6 +69,32 @@ namespace Guardian.Web.UI.Controllers
             {
                 return View(model);
             }
+
+            Alert(AlertTypes.Success, "Target successfully added!");
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(TargetDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _mediator.Send(new Update.Command()
+            {
+                Target = model
+            });
+
+            if (!result.IsSucceeded)
+            {
+                return View(model);
+            }
+
+            Alert(AlertTypes.Success, "Target successfully updated!");
 
             return RedirectToAction(nameof(Index));
         }
