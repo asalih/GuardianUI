@@ -7,7 +7,6 @@ namespace Guardian.Domain.Target
         public TargetDtoValidator()
         {
             DefaultValidatorExtensions.NotNull(RuleFor(x => x.Domain)).NotEmpty();
-            RuleFor(s => s.Port).GreaterThan(0).LessThanOrEqualTo(65536);
         }
     }
 }

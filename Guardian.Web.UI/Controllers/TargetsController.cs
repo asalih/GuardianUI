@@ -35,20 +35,47 @@ namespace Guardian.Web.UI.Controllers
 
         public async Task<IActionResult> Update(Guid id)
         {
-            if(id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 return NotFound();
             }
 
             var query = await _mediator.Send(new Details.Query(id));
 
-            if(query?.Result == null ||
+            if (query?.Result == null ||
                 query?.IsSucceeded != true)
             {
                 return NotFound();
             }
 
             return View(query.Result);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReCreateCertificate(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var result = await _mediator.Send(new Update.Command()
+            {
+                TargetId = id,
+                IsReCreateCertificateCommand = true
+            });
+
+            if (result.IsSucceeded)
+            {
+                Alert(AlertTypes.Success, "Successfully re-created certificate.");
+            }
+            else
+            {
+                Alert(AlertTypes.Error, "Re-creating certificate has faild.");
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]

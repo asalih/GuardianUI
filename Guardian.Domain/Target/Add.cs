@@ -5,6 +5,8 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 using Guardian.Infrastructure.Security.Specs;
+using System.Net;
+using System.Linq;
 
 namespace Guardian.Domain.Target
 {
@@ -41,6 +43,16 @@ namespace Guardian.Domain.Target
                 }
 
                 var target = _mapper.Map<Infrastructure.Entity.Target>(message.Target);
+
+                var sslCert = SSLHelper.CreateSSL(target.Domain);
+
+                target.CertCrt = sslCert.CertCrt;
+                target.CertKey = sslCert.CertKey;
+
+                var ipAddress = await Dns.GetHostEntryAsync(target.Domain);
+
+                target.OriginIpAddress = ipAddress.AddressList.FirstOrDefault()?.ToString() ?? null;
+                target.Port = 443;
 
                 await _repository.Add(target);
 

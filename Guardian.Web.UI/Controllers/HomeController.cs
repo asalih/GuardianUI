@@ -1,18 +1,22 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Guardian.Web.UI.Models;
+using Guardian.Domain;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Guardian.Web.UI.Controllers
 {
     public class HomeController : BaseController
     {
-        public HomeController()
+        private readonly IHostingEnvironment env;
+
+        public HomeController(IHostingEnvironment env)
         {
+            this.env = env;
         }
 
         public IActionResult Index()
         {
-            Alert(AlertTypes.Error, "Error");
             return View();
         }
 

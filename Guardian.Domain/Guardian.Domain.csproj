@@ -17,4 +17,25 @@
     <ProjectReference Include="..\Guardian.Infrastructure\Guardian.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="openssl\msys-2.0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="openssl\msys-crypto-1.0.0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="openssl\msys-ssl-1.0.0.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="openssl\msys-z.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="openssl\openssl.cnf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="openssl\openssl.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

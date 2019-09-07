@@ -7,6 +7,13 @@
 
 <h1>Update Target</h1>
 <hr />
+<div>
+    <form asp-action="ReCreateCertificate">
+        <input type="hidden" asp-for="Id" />
+        <button class="btn btn-primary" type="submit">Re-create Certificate</button>
+    </form>
+</div>
+<br />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Update">
