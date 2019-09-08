@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Guardian.Domain
 {
@@ -30,7 +31,7 @@ namespace Guardian.Domain
             //Load base config file, append needed data and save for later usage
             var configFilePath = Path.Combine(openSSLDir, $"{baseFileName}.cnf");
             var configFileContent = File.ReadAllText(Path.Combine(openSSLDir, "openssl.cnf")).Replace("{dir_placeholder}", openSSLDir + "\\ssl") +
-                    $"[SAN]\nsubjectAltName=DNS:{domain},IP:192.168.1.26";
+                    $"[SAN]\nsubjectAltName=DNS:{domain}";
 
             File.WriteAllText(configFilePath, configFileContent);
 
@@ -59,13 +60,25 @@ namespace Guardian.Domain
                 CertKey = File.ReadAllText(certKeyPath)
             };
 
+            InstallCertificate(certCrtPath);
+
             //Lets clear the path.
             ////File.Delete(batFilePath);
-            //File.Delete(certCrtPath);
-            //File.Delete(certKeyPath);
-            //File.Delete(configFilePath);
+            File.Delete(certCrtPath);
+            File.Delete(certKeyPath);
+            File.Delete(configFilePath);
 
             return result;
+        }
+
+        private static void InstallCertificate(string cerFileName)
+        {
+            var certificate = new X509Certificate2(cerFileName);
+            var store = new X509Store(StoreName.Root, StoreLocation.LocalMachine);
+
+            store.Open(OpenFlags.ReadWrite);
+            store.Add(certificate);
+            store.Close();
         }
     }
 }

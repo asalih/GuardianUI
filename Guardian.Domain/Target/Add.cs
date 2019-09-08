@@ -52,7 +52,6 @@ namespace Guardian.Domain.Target
                 var ipAddress = await Dns.GetHostEntryAsync(target.Domain);
 
                 target.OriginIpAddress = ipAddress.AddressList.FirstOrDefault()?.ToString() ?? null;
-                target.Port = 443;
 
                 await _repository.Add(target);
 

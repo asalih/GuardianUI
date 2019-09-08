@@ -28,10 +28,10 @@
                 <input asp-for="OriginIpAddress" class="form-control" />
                 <span asp-validation-for="OriginIpAddress" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Port" class="control-label"></label>
-                <input asp-for="Port" class="form-control" />
-                <span asp-validation-for="Port" class="text-danger"></span>
+            <div class="form-check">
+                <input asp-for="UseHttps" class="form-check-input" />
+                <label asp-for="UseHttps" class="form-check-label"></label>
+                <span asp-validation-for="UseHttps" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CertKey" class="control-label"></label>

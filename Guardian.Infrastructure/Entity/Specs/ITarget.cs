@@ -12,6 +12,6 @@ namespace Guardian.Infrastructure.Entity.Specs
 
         string CertCrt { get; set; }
 
-        int Port { get; set; }
+        bool UseHttps { get; set; }
     }
 }

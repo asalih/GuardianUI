@@ -20,7 +20,6 @@ namespace Guardian.Infrastructure.Entity
 
         public virtual Account Account { get; set; }
 
-        [Range(1, 65536)]
-        public int Port { get; set; }
+        public bool UseHttps { get; set; }
     }
 }

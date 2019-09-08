@@ -51,9 +51,8 @@ namespace Guardian.Domain.Target
                     };
                 }
 
-                target.Port = message.Target.Port;
                 target.OriginIpAddress = message.Target.OriginIpAddress;
-
+                target.UseHttps = message.Target.UseHttps;
                 target.CertCrt = message.Target.CertCrt;
                 target.CertKey = message.Target.CertKey;
 

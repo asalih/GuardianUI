@@ -8,6 +8,7 @@ namespace Guardian.Domain.Target
     {
         public TargetDto()
         {
+            UseHttps = true;
             CreatedAt = DateTimeOffset.Now;
         }
 
@@ -24,8 +25,9 @@ namespace Guardian.Domain.Target
         [Display(Name = "Certificate")]
         public string CertCrt { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; }
+        [Display(Name = "Force to Use Https")]
+        public bool UseHttps { get; set; }
 
-        public int Port { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
     }
 }

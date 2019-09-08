@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Guardian.Infrastructure.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitalCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -35,7 +35,7 @@ namespace Guardian.Infrastructure.Migrations
                     CertKey = table.Column<string>(nullable: true),
                     CertCrt = table.Column<string>(nullable: true),
                     AccountId = table.Column<Guid>(nullable: false),
-                    Port = table.Column<int>(nullable: false)
+                    UseHttps = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
