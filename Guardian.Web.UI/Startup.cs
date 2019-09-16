@@ -70,7 +70,7 @@ namespace Guardian.Web.UI
 
             services.AddDbContext<GuardianDataContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetValue<string>("ConnectionString"));
+                options.UseNpgsql(Configuration.GetValue<string>("ConnectionString"));
             });
 
             services.AddAutoMapper(typeof(Representor).Assembly);

@@ -3,8 +3,8 @@ using System;
 using Guardian.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Guardian.Infrastructure.Migrations
 {
@@ -15,9 +15,9 @@ namespace Guardian.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn)
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Account", b =>
                 {
@@ -69,8 +69,7 @@ namespace Guardian.Infrastructure.Migrations
                     b.HasIndex("AccountId");
 
                     b.HasIndex("Domain")
-                        .IsUnique()
-                        .HasFilter("[Domain] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Targets");
                 });

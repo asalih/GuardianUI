@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Guardian.Infrastructure.Migrations
 {
-    public partial class InitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,8 +57,7 @@ namespace Guardian.Infrastructure.Migrations
                 name: "IX_Targets_Domain",
                 table: "Targets",
                 column: "Domain",
-                unique: true,
-                filter: "[Domain] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
