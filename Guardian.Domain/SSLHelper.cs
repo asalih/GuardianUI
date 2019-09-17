@@ -14,13 +14,13 @@ namespace Guardian.Domain
         {
             if (Infrastructure.OperatingSystem.IsWindows())
             {
-                return CreateWinSSL(domain);
+                return CreateSelfSignedWinSSL(domain);
             }
 
             return null;
         }
 
-        private static SSL CreateWinSSL(string domain)
+        private static SSL CreateSelfSignedWinSSL(string domain)
         {
             var openSSLDir = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "openssl");
 
@@ -36,9 +36,6 @@ namespace Guardian.Domain
             File.WriteAllText(configFilePath, configFileContent);
 
             var args = string.Format(winCmd, domain, baseFileName, openSSLDir, configFilePath);
-
-            //var batFilePath = Path.Combine(openSSLDir, $"\\{baseFileName}.bat");
-            //File.WriteAllText(batFilePath, $"set OPENSSL_CONF={configFilePath}{Environment.NewLine}{execPath} {args}{Environment.NewLine}pause");
 
             var psi = new Process
             {
@@ -63,7 +60,6 @@ namespace Guardian.Domain
             InstallCertificate(certCrtPath);
 
             //Lets clear the path.
-            ////File.Delete(batFilePath);
             File.Delete(certCrtPath);
             File.Delete(certKeyPath);
             File.Delete(configFilePath);
