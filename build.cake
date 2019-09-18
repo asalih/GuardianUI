@@ -35,7 +35,7 @@ Task("Publish")
         VersionSuffix = tag
     };
                 
-    DotNetCorePublish("src/Conduit", settings);
+    DotNetCorePublish("./", settings);
 });
 
 Task("Clean")
