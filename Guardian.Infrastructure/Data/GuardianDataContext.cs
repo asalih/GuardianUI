@@ -14,7 +14,13 @@ namespace Guardian.Infrastructure.Data
         {
         }
 
+        public DbSet<Account> Accounts { get; set; }
+
         public DbSet<Target> Targets { get; set; }
+
+        public DbSet<WafRule> WafRules { get; set; }
+
+        public DbSet<WafRuleLog> WafRuleLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

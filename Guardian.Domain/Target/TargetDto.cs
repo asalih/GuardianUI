@@ -4,15 +4,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Guardian.Domain.Target
 {
-    public class TargetDto : ITarget
+    public class TargetDto : DtoBase, ITarget
     {
         public TargetDto()
         {
             UseHttps = true;
             CreatedAt = DateTimeOffset.Now;
         }
-
-        public Guid Id { get; set; }
 
         public string Domain { get; set; }
 
@@ -27,7 +25,5 @@ namespace Guardian.Domain.Target
 
         [Display(Name = "Force to Use Https")]
         public bool UseHttps { get; set; }
-
-        public DateTimeOffset CreatedAt { get; set; }
     }
 }

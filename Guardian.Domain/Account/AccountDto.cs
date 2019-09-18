@@ -5,10 +5,8 @@ using System.Runtime.Serialization;
 
 namespace Guardian.Domain.Account
 {
-    public class AccountDto : IAccount
+    public class AccountDto : DtoBase, IAccount
     {
-        public Guid Id { get; set; }
-
         public string Email { get; set; }
 
         [JsonIgnore]
@@ -20,7 +18,5 @@ namespace Guardian.Domain.Account
         public string Salt { get; set; }
 
         public string FullName { get; set; }
-        
-        public DateTimeOffset CreatedAt { get; set; }
     }
 }

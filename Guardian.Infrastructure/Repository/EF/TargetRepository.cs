@@ -18,36 +18,21 @@ namespace Guardian.Infrastructure.Repository.EF
 
         }
 
-        public async Task Add(Target entity)
+        public override async Task Add(Target entity)
         {
             entity.AccountId = AccountId.Value;
 
-            await DbSet.AddAsync(entity);
-            await Context.SaveChangesAsync();
+            await base.Add(entity);
         }
 
         public async Task<Target> GetTargetWithTheDomain(string domain) =>
             await DbSet.FirstOrDefaultAsync(s => s.AccountId == AccountId && s.Domain == domain);
 
-        public async Task<Target> FirstOrDefault(Expression<Func<Target, bool>> predicate)
+        public override async Task<Target> FirstOrDefault(Expression<Func<Target, bool>> predicate)
             => await DbSet.Where(s => s.AccountId == AccountId).FirstOrDefaultAsync(predicate);
 
         public async Task<Target> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.AccountId == AccountId);
 
         public IQueryable<Target> Query() => DbSet.AsQueryable<Target>().Where(s => s.AccountId == AccountId);
-
-        public async Task<int> Remove(Target entity)
-        {
-            DbSet.Remove(entity);
-
-            return await Context.SaveChangesAsync();
-        }
-
-        public async Task<int> Update(Target entity)
-        {
-            // In case AsNoTracking is used
-            Context.Entry(entity).State = EntityState.Modified;
-            return await Context.SaveChangesAsync();
-        }
     }
 }
