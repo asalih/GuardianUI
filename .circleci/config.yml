@@ -2,18 +2,15 @@ version: 2
 jobs:
   build:
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk/:2.2
+      - image: microsoft/dotnet:2.2.104-sdk
     steps:
       - checkout
       - run:
-        name: "Restore packages"
-        command:
-          dotnet restore
+          name: Install Cake
+          command: |
+            dotnet tool install -g Cake.Tool
+            echo 'export PATH=$PATH:/root/.dotnet/tools' >> $BASH_ENV
+            source $BASH_ENV
       - run:
-        name: "Build app"
-        command:
-          dotnet build
-      - run:
-        name: "Run app"
-        command:
-          dotnet run
+          name: Build
+          command: dotnet cake build.cake --runtime=linux-x64
