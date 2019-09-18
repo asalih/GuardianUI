@@ -1,6 +1,6 @@
 var target = Argument("target", "Default");
 var tag = Argument("tag", "cake");
-var runtime = Argument("runtime", "osx.10.12-x64");
+var runtime = Argument("runtime", "linux-x64");
 
 Task("Restore")
   .Does(() =>
