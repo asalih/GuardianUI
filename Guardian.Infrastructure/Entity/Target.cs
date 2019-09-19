@@ -21,5 +21,7 @@ namespace Guardian.Infrastructure.Entity
         public virtual Account Account { get; set; }
 
         public bool UseHttps { get; set; }
+
+        public bool WAFEnabled { get; set; }
     }
 }

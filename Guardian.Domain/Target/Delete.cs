@@ -51,7 +51,7 @@ namespace Guardian.Domain.Target
                 return new CommandResult<TargetDto>()
                 {
                     IsSucceeded = await _repository.Remove(target) > 0
-            };
+                };
             }
         }
     }

@@ -20,6 +20,8 @@
 
         public T Result { get; set; }
 
+        public string Message { get; set; }
+
         public bool IsSucceeded { get; set; }
     }
 }

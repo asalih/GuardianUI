@@ -6,8 +6,8 @@ namespace Guardian.Web.UI.Controllers
     {
         public void Alert(string alertType, string message)
         {
-            ViewBag.AlertType = alertType;
-            ViewBag.Message = message;
+            TempData["AlertType"] = alertType;
+            TempData["Message"] = message;
         }
     }
 }

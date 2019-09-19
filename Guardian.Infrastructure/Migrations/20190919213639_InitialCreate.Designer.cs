@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20190916210423_InitialCreate")]
+    [Migration("20190919213639_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,7 +42,53 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Account");
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.FirewallRule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AccountId");
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<string>("Expression");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<Guid>("TargetId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FirewallRules");
+                });
+
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("ExecutionMillisecond");
+
+                    b.Property<Guid?>("FirewallRuleId");
+
+                    b.Property<bool>("IsHitted");
+
+                    b.Property<int>("LogType");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FirewallRuleId");
+
+                    b.ToTable("RuleLogs");
                 });
 
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Target", b =>
@@ -66,6 +112,8 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<bool>("UseHttps");
 
+                    b.Property<bool>("WAFEnabled");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -74,6 +122,13 @@ namespace Guardian.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Targets");
+                });
+
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
+                {
+                    b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "WafRule")
+                        .WithMany()
+                        .HasForeignKey("FirewallRuleId");
                 });
 
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Target", b =>

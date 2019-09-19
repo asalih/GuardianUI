@@ -2,7 +2,7 @@
 
 namespace Guardian.Infrastructure.Entity.Specs
 {
-    public interface IWafRule : IEntityBase
+    public interface IFirewallRule : IEntityBase
     {
         Guid AccountId { get; set; }
 
@@ -11,5 +11,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         string Title { get; set; }
 
         string Expression { get; set; }
+
+        bool IsActive { get; set; }
     }
 }

@@ -1,13 +1,14 @@
-﻿@model Guardian.Domain.QueryListResult<Guardian.Domain.Target.TargetDto>
+﻿@model Guardian.Domain.QueryListResult<Guardian.Domain.FirewallRule.FirewallRuleDto>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Waf Rules";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Targets</h1>
+    <h1 class="display-4">Firewall Rules</h1>
     <hr />
     <div>
-        <a class="btn btn-primary" asp-area="" asp-controller="Targets" asp-action="Create">Create</a>
+        <a class="btn btn-primary" asp-area="" asp-controller="FirewallRules" asp-action="Create" asp-route-id="@ViewBag.TargetId">Create</a>
     </div>
     <br />
     @if (Model.IsSucceeded && Model.Count > 0)
@@ -16,10 +17,13 @@
             <thead>
                 <tr>
                     <th>
-                        Domain
+                        Title
                     </th>
                     <th>
-                        Origin IP Address
+                        Expression
+                    </th>
+                    <th>
+                        Active
                     </th>
                     <th>
                     </th>
@@ -30,16 +34,18 @@
                 {
                 <tr>
                     <td>
-                        @item.Domain
+                        @item.Title
                     </td>
                     <td>
-                        @item.OriginIpAddress
+                        @item.Expression
+                    </td>
+                    <td>
+                        @item.IsActive
                     </td>
                     <td>
                         <form asp-action="Delete">
                             @Html.Hidden("id", item.Id)
                             <a class="btn btn-sm btn-info" asp-action="Update" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-sm btn-dark" asp-action="Index" asp-controller="FirewallRules" asp-route-id="@item.Id">Firewall Rules</a>
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>
                     </td>

@@ -18,9 +18,9 @@ namespace Guardian.Infrastructure.Data
 
         public DbSet<Target> Targets { get; set; }
 
-        public DbSet<WafRule> WafRules { get; set; }
+        public DbSet<FirewallRule> FirewallRules { get; set; }
 
-        public DbSet<WafRuleLog> WafRuleLogs { get; set; }
+        public DbSet<RuleLog> RuleLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

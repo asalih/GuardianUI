@@ -13,5 +13,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         string CertCrt { get; set; }
 
         bool UseHttps { get; set; }
+
+        bool WAFEnabled { get; set; }
     }
 }

@@ -28,23 +28,16 @@ namespace Guardian.Domain.Target
         {
             private readonly ITargetRepository _repository;
             private readonly IMapper _mapper;
-            private readonly IIdentityHelper _identityHelper;
 
-            public QueryHandler(ITargetRepository repository,
-                IMapper mapper,
-                IIdentityHelper identityHelper)
+            public QueryHandler(ITargetRepository repository, IMapper mapper)
             {
                 _repository = repository;
                 _mapper = mapper;
-                _identityHelper = identityHelper;
             }
 
             public async Task<QueryListResult<TargetDto>> Handle(Query message, CancellationToken cancellationToken)
             {
-                var accountId = _identityHelper.GetAccountId();
-
-                var query = _repository.Query()
-                    .Where(s => s.AccountId == accountId);
+                var query = _repository.Query();
 
                 var targets = await query
                     .Skip(message.Offset ?? 0)

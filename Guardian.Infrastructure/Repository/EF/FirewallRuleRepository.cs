@@ -10,26 +10,26 @@ using System.Threading.Tasks;
 
 namespace Guardian.Infrastructure.Repository.EF
 {
-    public class WafRuleRepository : BaseRepository<WafRule>, IWafRuleRepository
+    public class FirewallRuleRepository : BaseRepository<FirewallRule>, IFirewallRuleRepository
     {
-        public WafRuleRepository(GuardianDataContext context, IIdentityHelper identityHelper)
+        public FirewallRuleRepository(GuardianDataContext context, IIdentityHelper identityHelper)
             : base(context, identityHelper)
         {
 
         }
 
-        public override async Task Add(WafRule entity)
+        public override async Task Add(FirewallRule entity)
         {
             entity.AccountId = AccountId.Value;
 
             await base.Add(entity);
         }
 
-        public async Task<WafRule> FirstOrDefault(Expression<Func<WafRule, bool>> predicate)
+        public override async Task<FirewallRule> FirstOrDefault(Expression<Func<FirewallRule, bool>> predicate)
             => await DbSet.Where(s => s.AccountId == AccountId).FirstOrDefaultAsync(predicate);
 
-        public async Task<WafRule> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.AccountId == AccountId);
+        public async Task<FirewallRule> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.AccountId == AccountId);
 
-        public IQueryable<WafRule> Query() => DbSet.AsQueryable<WafRule>().Where(s => s.AccountId == AccountId);
+        public IQueryable<FirewallRule> Query() => DbSet.AsQueryable<FirewallRule>().Where(s => s.AccountId == AccountId);
     }
 }

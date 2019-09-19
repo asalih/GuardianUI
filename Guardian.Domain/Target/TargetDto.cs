@@ -25,5 +25,8 @@ namespace Guardian.Domain.Target
 
         [Display(Name = "Force to Use Https")]
         public bool UseHttps { get; set; }
+
+        [Display(Name = "WAF Enabled")]
+        public bool WAFEnabled { get; set; }
     }
 }

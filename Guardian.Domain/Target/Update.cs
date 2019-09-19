@@ -55,6 +55,7 @@ namespace Guardian.Domain.Target
                 target.UseHttps = message.Target.UseHttps;
                 target.CertCrt = message.Target.CertCrt;
                 target.CertKey = message.Target.CertKey;
+                target.WAFEnabled = message.Target.WAFEnabled;
 
                 if (target.Domain != message.Target.Domain)
                 {

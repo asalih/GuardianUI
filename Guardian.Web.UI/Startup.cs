@@ -37,6 +37,8 @@ namespace Guardian.Web.UI
 
             services.AddScoped(typeof(ITargetRepository), typeof(TargetRepository));
             services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
+            services.AddScoped(typeof(IFirewallRuleRepository), typeof(FirewallRuleRepository));
+            services.AddScoped(typeof(IRuleLogRepository), typeof(RuleLogRepository));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IIdentityHelper, IdentityHelper>();

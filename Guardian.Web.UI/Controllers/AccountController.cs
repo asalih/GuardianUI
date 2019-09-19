@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Guardian.Domain.Account;
 using Guardian.Infrastructure.Security.Specs;
+using Guardian.Web.UI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -56,6 +57,7 @@ namespace Guardian.Web.UI.Controllers
 
             if (!account.IsSucceeded)
             {
+                Alert(AlertTypes.Error, "Incorrect email or password!");
                 return View(model);
             }
 

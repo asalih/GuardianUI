@@ -2,8 +2,8 @@
 
 namespace Guardian.Infrastructure.Repository.Specs
 {
-    public interface IWafRuleRepository : IRepository<WafRule>
+    public interface IRuleLogRepository : IRepository<RuleLog>
     {
-        
+
     }
 }

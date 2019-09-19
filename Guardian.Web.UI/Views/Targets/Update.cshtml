@@ -33,6 +33,11 @@
                 <label asp-for="UseHttps" class="form-check-label"></label>
                 <span asp-validation-for="UseHttps" class="text-danger"></span>
             </div>
+            <div class="form-check">
+                <input asp-for="WAFEnabled" class="form-check-input" />
+                <label asp-for="WAFEnabled" class="form-check-label"></label>
+                <span asp-validation-for="WAFEnabled" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="CertKey" class="control-label"></label>
                 <textarea asp-for="CertKey" class="form-control"></textarea>

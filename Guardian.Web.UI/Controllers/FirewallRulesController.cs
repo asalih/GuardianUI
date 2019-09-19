@@ -1,35 +1,48 @@
-﻿using System;
-using System.Threading.Tasks;
-using Guardian.Domain;
-using Guardian.Domain.Target;
+﻿using Guardian.Domain.FirewallRule;
 using Guardian.Web.UI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace Guardian.Web.UI.Controllers
 {
     [Authorize]
-    public class TargetsController : BaseController
+    public class FirewallRulesController : BaseController
     {
         private readonly IMediator _mediator;
 
-        public TargetsController(IMediator mediator)
+        public FirewallRulesController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
-        public async Task<IActionResult> Index()
+        [HttpGet]
+        public async Task<ActionResult> Index([FromRoute]Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return RedirectToAction("Index", "Targets");
+            }
+
             //TODO: Add paging.
 
-            var result = await _mediator.Send(new List.Query());
+            var result = await _mediator.Send(new List.Query(id));
+
+            ViewBag.TargetId = id;
 
             return View(result);
         }
 
-        public IActionResult Create() => View();
+        [HttpGet]
+        public ActionResult Create(Guid id) => View(new FirewallRuleDto
+        {
+            TargetId = id,
+            IsActive = true
+        });
 
+        [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             if (id == Guid.Empty)
@@ -49,35 +62,7 @@ namespace Guardian.Web.UI.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReCreateCertificate(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                return NotFound();
-            }
-
-            var result = await _mediator.Send(new Update.Command()
-            {
-                TargetId = id,
-                IsReCreateCertificateCommand = true
-            });
-
-            if (result.IsSucceeded)
-            {
-                Alert(AlertTypes.Success, "Successfully re-created certificate.");
-            }
-            else
-            {
-                Alert(AlertTypes.Error, "Re-creating certificate has faild.");
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(TargetDto model)
+        public async Task<ActionResult> Create(FirewallRuleDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -86,7 +71,7 @@ namespace Guardian.Web.UI.Controllers
 
             var result = await _mediator.Send(new Add.Command()
             {
-                Target = model
+                FirewallRule = model
             });
 
             if (!result.IsSucceeded)
@@ -94,14 +79,15 @@ namespace Guardian.Web.UI.Controllers
                 return View(model);
             }
 
-            Alert(AlertTypes.Success, "Target successfully added!");
+            Alert(AlertTypes.Success, "Firewall Rule successfully added!");
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = model.TargetId });
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(TargetDto model)
+        public async Task<IActionResult> Update(FirewallRuleDto model)
         {
             if (!ModelState.IsValid)
             {
@@ -110,7 +96,7 @@ namespace Guardian.Web.UI.Controllers
 
             var result = await _mediator.Send(new Update.Command()
             {
-                Target = model
+                FirewallRule = model
             });
 
             if (!result.IsSucceeded)
@@ -118,18 +104,25 @@ namespace Guardian.Web.UI.Controllers
                 return View(model);
             }
 
-            Alert(AlertTypes.Success, "Target successfully updated!");
+            Alert(AlertTypes.Success, "Firewall Rule successfully updated!");
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = model.TargetId });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
+            var firewallRule = await _mediator.Send(new Details.Query(id));
+
+            if (firewallRule == null)
+            {
+                return NotFound();
+            }
+
             var result = await _mediator.Send(new Delete.Command()
             {
-                Target = new TargetDto()
+                FirewallRule = new FirewallRuleDto()
                 {
                     Id = id
                 }
@@ -137,14 +130,14 @@ namespace Guardian.Web.UI.Controllers
 
             if (result.IsSucceeded)
             {
-                Alert(AlertTypes.Success, "Target successfully deleted!");
+                Alert(AlertTypes.Success, "Firewall Rule successfully deleted!");
             }
             else
             {
-                Alert(AlertTypes.Error, "Target couldn't deleted!");
+                Alert(AlertTypes.Error, "Firewall Rule couldn't deleted!");
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = firewallRule.Result.Target.Id });
         }
     }
 }

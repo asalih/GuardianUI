@@ -43,6 +43,52 @@ namespace Guardian.Infrastructure.Migrations
                     b.ToTable("Accounts");
                 });
 
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.FirewallRule", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("AccountId");
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<string>("Expression");
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<Guid>("TargetId");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FirewallRules");
+                });
+
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("ExecutionMillisecond");
+
+                    b.Property<Guid?>("FirewallRuleId");
+
+                    b.Property<bool>("IsHitted");
+
+                    b.Property<int>("LogType");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FirewallRuleId");
+
+                    b.ToTable("RuleLogs");
+                });
+
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Target", b =>
                 {
                     b.Property<Guid>("Id")
@@ -64,6 +110,8 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<bool>("UseHttps");
 
+                    b.Property<bool>("WAFEnabled");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -74,48 +122,11 @@ namespace Guardian.Infrastructure.Migrations
                     b.ToTable("Targets");
                 });
 
-            modelBuilder.Entity("Guardian.Infrastructure.Entity.WafRule", b =>
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("AccountId");
-
-                    b.Property<int>("CheckPoint");
-
-                    b.Property<int>("CheckType");
-
-                    b.Property<DateTimeOffset>("CreatedAt");
-
-                    b.Property<string>("Payload");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.ToTable("WafRules");
-                });
-
-            modelBuilder.Entity("Guardian.Infrastructure.Entity.WafRuleLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("CreatedAt");
-
-                    b.Property<int>("ExecutionMillisecond");
-
-                    b.Property<bool>("IsHitted");
-
-                    b.Property<Guid>("WafRuleId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WafRuleId");
-
-                    b.ToTable("WafRuleLogs");
+                    b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "WafRule")
+                        .WithMany()
+                        .HasForeignKey("FirewallRuleId");
                 });
 
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Target", b =>
@@ -123,22 +134,6 @@ namespace Guardian.Infrastructure.Migrations
                     b.HasOne("Guardian.Infrastructure.Entity.Account", "Account")
                         .WithMany("Targets")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Guardian.Infrastructure.Entity.WafRule", b =>
-                {
-                    b.HasOne("Guardian.Infrastructure.Entity.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Guardian.Infrastructure.Entity.WafRuleLog", b =>
-                {
-                    b.HasOne("Guardian.Infrastructure.Entity.WafRule", "WafRule")
-                        .WithMany()
-                        .HasForeignKey("WafRuleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
