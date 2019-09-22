@@ -28,5 +28,7 @@ namespace Guardian.Domain.Target
 
         [Display(Name = "WAF Enabled")]
         public bool WAFEnabled { get; set; }
+
+        public bool IsVerified { get; set; }
     }
 }

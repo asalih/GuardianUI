@@ -4,6 +4,8 @@ namespace Guardian.Infrastructure.Entity.Specs
 {
     public interface IRuleLog : IEntityBase
     {
+        Guid TargetId { get; set; }
+
         Guid? FirewallRuleId { get; set; }
 
         bool IsHitted { get; set; }

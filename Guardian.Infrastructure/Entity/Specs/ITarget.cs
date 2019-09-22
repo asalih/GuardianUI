@@ -15,5 +15,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         bool UseHttps { get; set; }
 
         bool WAFEnabled { get; set; }
+
+        bool IsVerified { get; set; }
     }
 }

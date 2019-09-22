@@ -19,10 +19,10 @@ namespace Guardian.Infrastructure.Repository.EF
         }
 
         public override async Task<RuleLog> FirstOrDefault(Expression<Func<RuleLog, bool>> predicate)
-            => await DbSet.Where(s => s.WafRule.AccountId == AccountId).FirstOrDefaultAsync(predicate);
+            => await DbSet.Where(s => s.Target.AccountId == AccountId).FirstOrDefaultAsync(predicate);
 
-        public async Task<RuleLog> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.WafRule.AccountId == AccountId);
+        public async Task<RuleLog> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.Target.AccountId == AccountId);
 
-        public IQueryable<RuleLog> Query() => DbSet.AsQueryable<RuleLog>().Where(s => s.WafRule.AccountId == AccountId);
+        public IQueryable<RuleLog> Query() => DbSet.AsQueryable<RuleLog>().Where(s => s.Target.AccountId == AccountId);
     }
 }

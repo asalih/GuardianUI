@@ -45,6 +45,9 @@ namespace Guardian.Domain.Target
                 message.Target.UseHttps = true;
                 message.Target.WAFEnabled = true;
 
+                //TODO: Add verification process.
+                message.Target.IsVerified = true;
+
                 var target = _mapper.Map<Infrastructure.Entity.Target>(message.Target);
 
                 var sslCert = SSLHelper.CreateSSL(target.Domain);

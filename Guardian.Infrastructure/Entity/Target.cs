@@ -23,5 +23,7 @@ namespace Guardian.Infrastructure.Entity
         public bool UseHttps { get; set; }
 
         public bool WAFEnabled { get; set; }
+
+        public bool IsVerified { get; set; }
     }
 }

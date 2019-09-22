@@ -25,6 +25,32 @@ namespace Guardian.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Targets",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
+                    Domain = table.Column<string>(maxLength: 250, nullable: true),
+                    OriginIpAddress = table.Column<string>(maxLength: 250, nullable: true),
+                    CertKey = table.Column<string>(nullable: true),
+                    CertCrt = table.Column<string>(nullable: true),
+                    AccountId = table.Column<Guid>(nullable: false),
+                    UseHttps = table.Column<bool>(nullable: false),
+                    WAFEnabled = table.Column<bool>(nullable: false),
+                    IsVerified = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Targets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Targets_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FirewallRules",
                 columns: table => new
                 {
@@ -39,29 +65,16 @@ namespace Guardian.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FirewallRules", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Targets",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
-                    Domain = table.Column<string>(maxLength: 250, nullable: true),
-                    OriginIpAddress = table.Column<string>(maxLength: 250, nullable: true),
-                    CertKey = table.Column<string>(nullable: true),
-                    CertCrt = table.Column<string>(nullable: true),
-                    AccountId = table.Column<Guid>(nullable: false),
-                    UseHttps = table.Column<bool>(nullable: false),
-                    WAFEnabled = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Targets", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Targets_Accounts_AccountId",
+                        name: "FK_FirewallRules_Accounts_AccountId",
                         column: x => x.AccountId,
                         principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FirewallRules_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -72,6 +85,7 @@ namespace Guardian.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false),
+                    TargetId = table.Column<Guid>(nullable: false),
                     IsHitted = table.Column<bool>(nullable: false),
                     ExecutionMillisecond = table.Column<int>(nullable: false),
                     LogType = table.Column<int>(nullable: false),
@@ -87,12 +101,33 @@ namespace Guardian.Infrastructure.Migrations
                         principalTable: "FirewallRules",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RuleLogs_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FirewallRules_AccountId",
+                table: "FirewallRules",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FirewallRules_TargetId",
+                table: "FirewallRules",
+                column: "TargetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RuleLogs_FirewallRuleId",
                 table: "RuleLogs",
                 column: "FirewallRuleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RuleLogs_TargetId",
+                table: "RuleLogs",
+                column: "TargetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Targets_AccountId",
@@ -112,10 +147,10 @@ namespace Guardian.Infrastructure.Migrations
                 name: "RuleLogs");
 
             migrationBuilder.DropTable(
-                name: "Targets");
+                name: "FirewallRules");
 
             migrationBuilder.DropTable(
-                name: "FirewallRules");
+                name: "Targets");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

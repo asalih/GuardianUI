@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20190919213639_InitialCreate")]
+    [Migration("20190922222451_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,10 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("TargetId");
+
                     b.ToTable("FirewallRules");
                 });
 
@@ -84,9 +88,13 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<int>("LogType");
 
+                    b.Property<Guid>("TargetId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FirewallRuleId");
+
+                    b.HasIndex("TargetId");
 
                     b.ToTable("RuleLogs");
                 });
@@ -107,6 +115,8 @@ namespace Guardian.Infrastructure.Migrations
                     b.Property<string>("Domain")
                         .HasMaxLength(250);
 
+                    b.Property<bool>("IsVerified");
+
                     b.Property<string>("OriginIpAddress")
                         .HasMaxLength(250);
 
@@ -124,11 +134,29 @@ namespace Guardian.Infrastructure.Migrations
                     b.ToTable("Targets");
                 });
 
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.FirewallRule", b =>
+                {
+                    b.HasOne("Guardian.Infrastructure.Entity.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
+                        .WithMany()
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
                 {
-                    b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "WafRule")
+                    b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "FirewallRule")
                         .WithMany()
                         .HasForeignKey("FirewallRuleId");
+
+                    b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
+                        .WithMany()
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Guardian.Infrastructure.Entity.Target", b =>
