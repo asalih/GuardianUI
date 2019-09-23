@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Guardian.Infrastructure.Repository.Specs;
-using Guardian.Infrastructure.Security.Specs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,7 +39,7 @@ namespace Guardian.Domain.FirewallRule
 
             public async Task<QueryListResult<FirewallRuleDto>> Handle(Query message, CancellationToken cancellationToken)
             {
-                var query = _repository.Query();
+                var query = _repository.Query().Where(s => s.TargetId == message.TargetId);
 
                 var firewallRules = await query
                     .Skip(message.Offset ?? 0)

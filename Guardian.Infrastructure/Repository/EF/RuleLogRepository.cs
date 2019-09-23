@@ -18,6 +18,11 @@ namespace Guardian.Infrastructure.Repository.EF
 
         }
 
+        public override Task Add(RuleLog entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public override async Task<RuleLog> FirstOrDefault(Expression<Func<RuleLog, bool>> predicate)
             => await DbSet.Where(s => s.Target.AccountId == AccountId).FirstOrDefaultAsync(predicate);
 

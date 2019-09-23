@@ -22,6 +22,8 @@ namespace Guardian.Infrastructure.Data
 
         public DbSet<RuleLog> RuleLogs { get; set; }
 
+        public DbSet<HTTPLog> HTTPLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Target>(b =>

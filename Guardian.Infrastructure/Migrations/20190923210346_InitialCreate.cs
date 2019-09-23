@@ -80,6 +80,31 @@ namespace Guardian.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HTTPLogs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
+                    TargetId = table.Column<Guid>(nullable: false),
+                    RequestUri = table.Column<string>(nullable: true),
+                    StatusCode = table.Column<int>(nullable: false),
+                    RuleCheckElapsed = table.Column<long>(nullable: false),
+                    HttpElapsed = table.Column<long>(nullable: false),
+                    RequestSize = table.Column<long>(nullable: false),
+                    ResponseSize = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HTTPLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HTTPLogs_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RuleLogs",
                 columns: table => new
                 {
@@ -120,6 +145,11 @@ namespace Guardian.Infrastructure.Migrations
                 column: "TargetId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_HTTPLogs_TargetId",
+                table: "HTTPLogs",
+                column: "TargetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RuleLogs_FirewallRuleId",
                 table: "RuleLogs",
                 column: "FirewallRuleId");
@@ -143,6 +173,9 @@ namespace Guardian.Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "HTTPLogs");
+
             migrationBuilder.DropTable(
                 name: "RuleLogs");
 

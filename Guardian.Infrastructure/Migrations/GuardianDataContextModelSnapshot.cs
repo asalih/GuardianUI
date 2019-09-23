@@ -69,6 +69,34 @@ namespace Guardian.Infrastructure.Migrations
                     b.ToTable("FirewallRules");
                 });
 
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.HTTPLog", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<long>("HttpElapsed");
+
+                    b.Property<long>("RequestSize");
+
+                    b.Property<string>("RequestUri");
+
+                    b.Property<long>("ResponseSize");
+
+                    b.Property<long>("RuleCheckElapsed");
+
+                    b.Property<int>("StatusCode");
+
+                    b.Property<Guid>("TargetId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TargetId");
+
+                    b.ToTable("HTTPLogs");
+                });
+
             modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -139,6 +167,14 @@ namespace Guardian.Infrastructure.Migrations
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
+                        .WithMany()
+                        .HasForeignKey("TargetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Guardian.Infrastructure.Entity.HTTPLog", b =>
+                {
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
                         .WithMany()
                         .HasForeignKey("TargetId")

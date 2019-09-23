@@ -9,11 +9,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Guardian.Domain.RuleLog
+namespace Guardian.Domain.HTTPLog
 {
     public class List
     {
-        public class Query : IRequest<QueryListResult<RuleLogDto>>
+        public class Query : IRequest<QueryListResult<HTTPLogDto>>
         {
             public Query(Guid? targetId, int? limit = null, int? offset = null)
             {
@@ -35,7 +35,7 @@ namespace Guardian.Domain.RuleLog
             }
         }
 
-        public class QueryHandler : IRequestHandler<Query, QueryListResult<RuleLogDto>>
+        public class QueryHandler : IRequestHandler<Query, QueryListResult<HTTPLogDto>>
         {
             private readonly IRuleLogRepository _repository;
             private readonly IMapper _mapper;
@@ -46,19 +46,19 @@ namespace Guardian.Domain.RuleLog
                 _mapper = mapper;
             }
 
-            public async Task<QueryListResult<RuleLogDto>> Handle(Query message, CancellationToken cancellationToken)
+            public async Task<QueryListResult<HTTPLogDto>> Handle(Query message, CancellationToken cancellationToken)
             {
                 var query = _repository.Query().Where(s => s.TargetId == message.TargetId);
 
-                var ruleLogs = await query
+                var httpLogs = await query
                     .Skip(message.Offset ?? 0)
                     .Take(message.Limit ?? 20)
-                    .ProjectTo<RuleLogDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<HTTPLogDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
 
-                return new QueryListResult<RuleLogDto>()
+                return new QueryListResult<HTTPLogDto>()
                 {
-                    Result = ruleLogs,
+                    Result = httpLogs,
                     Count = query.Count(),
                     IsSucceeded = true
                 };
