@@ -28,7 +28,40 @@ namespace Guardian.Web.UI.Controllers
             return View(result);
         }
 
+        [HttpGet]
         public IActionResult Create() => View();
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var query = await _mediator.Send(new Details.Query(id));
+
+            if (query?.Result == null ||
+                query?.IsSucceeded != true)
+            {
+                return NotFound();
+            }
+
+            return View(query.Result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Report(Guid id, ReportType type)
+        {
+            if (id == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            var report = await _mediator.Send(new Report.Query(id, type));
+
+            return Json(report);
+        }
 
         public async Task<IActionResult> Update(Guid id)
         {

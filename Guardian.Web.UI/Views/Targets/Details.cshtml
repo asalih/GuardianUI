@@ -1,0 +1,37 @@
+﻿@model Guardian.Domain.Target.TargetDto
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <h1>@Model.Domain</h1>
+        </div>
+
+        <div class="col-6 align-self-center">
+            <form asp-action="Delete" class="float-right">
+                @Html.Hidden("id", Model.Id)
+                <a class="btn btn-sm btn-info" asp-action="Update" asp-route-id="@Model.Id">Edit</a>
+                <a class="btn btn-sm btn-dark" asp-action="Index" asp-controller="FirewallRules" asp-route-id="@Model.Id">Firewall Rules</a>
+                <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <canvas id="requestChart" style="width: 100%; height: 320px"></canvas>
+        </div>
+        <div class="col-6">
+            <canvas id="ruleChart" style="width: 100%; height: 320px"></canvas>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script src="~/lib/Chart.js/Chart.min.js" asp-append-version="true"></script>
+    <script src="~/js/details.js" asp-append-version="true"></script>
+}

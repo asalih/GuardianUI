@@ -28,26 +28,19 @@
             <tbody>
                 @foreach (var item in Model.Result)
                 {
-                <tr>
-                    <td>
-                        @item.Domain
-                    </td>
-                    <td>
-                        @item.OriginIpAddress
-                    </td>
-                    <td>
-                        <form asp-action="Delete">
-                            @Html.Hidden("id", item.Id)
-                            <a class="btn btn-sm btn-info" asp-action="Update" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-sm btn-dark" asp-action="Index" asp-controller="FirewallRules" asp-route-id="@item.Id">Firewall Rules</a>
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @item.Domain
+                        </td>
+                        <td>
+                            @item.OriginIpAddress
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
-
     }
-
 </div>

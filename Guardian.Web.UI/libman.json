@@ -1,0 +1,24 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@aspnet/signalr@next",
+      "destination": "wwwroot/lib/@aspnet/signalr/"
+    }
+  ,
+{
+  "provider": "cdnjs",
+  "library": "Chart.js@2.8.0",
+  "destination": "wwwroot/lib/Chart.js/",
+  "files": [
+    "Chart.min.js",
+    "Chart.bundle.js",
+    "Chart.bundle.min.js",
+    "Chart.css",
+    "Chart.js",
+    "Chart.min.css"
+  ]
+}
+]
+}
