@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Guardian.Infrastructure.Entity;
 using Guardian.Infrastructure.Repository.Specs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -54,27 +55,47 @@ namespace Guardian.Domain.Target
                     };
                 }
 
-                switch (message.ReportType)
-                {
-                    case ReportType.Request:
-                        return await HandleRequestQuery(message, target, cancellationToken);
-                    case ReportType.Rule:
-                        return await HandleRuleQuery(message, target, cancellationToken);
-                    case ReportType.RuleTime:
-                        return await HandleRuleTimeQuery(message, target, cancellationToken);
-                    default:
-                        break;
-                }
-
-                return null;
-
+                return await HandleReportQuery(message, target, cancellationToken);
             }
 
-            private async Task<QueryListResult<TargetReportDto>> HandleRequestQuery(Query message, Infrastructure.Entity.Target target, CancellationToken cancellationToken)
+            private async Task<QueryListResult<TargetReportDto>> HandleReportQuery(Query message, Infrastructure.Entity.Target target, CancellationToken cancellationToken)
             {
                 var dt = DateTime.Now.Subtract(TimeSpan.FromMinutes(30));
 
-                var qResult = await _logRepository.RequestQuery(dt, target);
+                DBReportResult[] qResult = null;
+
+                switch (message.ReportType)
+                {
+                    case ReportType.Request:
+                        qResult = await _logRepository.RequestQuery(dt, target);
+                        break;
+                    case ReportType.RequestTime:
+                        qResult = await _logRepository.RequestTimeQuery(dt, target);
+                        break;
+                    case ReportType.Rule:
+                        qResult = await _ruleLogRepository.RuleQuery(dt, target);
+                        break;
+                    case ReportType.RuleTime:
+                        qResult = await _ruleLogRepository.RuleTimeQuery(dt, target);
+                        break;
+                    case ReportType.RequestRuleRatio:
+                        var ratioResult = await _logRepository.RequestRuleRatioQuery(dt, target);
+
+                        return new QueryListResult<TargetReportDto>()
+                        {
+                            Result = new List<TargetReportDto>()
+                            {
+                                new TargetReportDto()
+                                {
+                                    Time = ratioResult.Time.ToShortTimeString(),
+                                    Value = ratioResult.Value
+                                }
+                            },
+                            IsSucceeded = true
+                        };
+                    default:
+                        break;
+                }
 
                 var returnResult = new List<TargetReportDto>(30);
                 for (int i = 0; i < 31; i++)
@@ -85,56 +106,6 @@ namespace Guardian.Domain.Target
                     {
                         Time = refDate.ToShortTimeString(),
                         Value = qResult.FirstOrDefault(s => s.Time.Minute == refDate.Minute)?.Value ?? 0
-                    });
-                }
-
-                return new QueryListResult<TargetReportDto>()
-                {
-                    Result = returnResult,
-                    IsSucceeded = true
-                };
-            }
-
-            private async Task<QueryListResult<TargetReportDto>> HandleRuleQuery(Query message, Infrastructure.Entity.Target target, CancellationToken cancellationToken)
-            {
-                var dt = DateTime.Now.Subtract(TimeSpan.FromMinutes(30));
-
-                var qResult = await _ruleLogRepository.RuleQuery(dt, target);
-
-                var returnResult = new List<TargetReportDto>(30);
-                for (int i = 0; i < 31; i++)
-                {
-                    var refDate = dt.AddMinutes(i);
-
-                    returnResult.Add(new TargetReportDto()
-                    {
-                        Time = dt.AddMinutes(i).ToShortTimeString(),
-                        Value = qResult.FirstOrDefault(s => s.Time.Minute == refDate.Minute)?.Value ?? 0
-                    });
-                }
-
-                return new QueryListResult<TargetReportDto>()
-                {
-                    Result = returnResult,
-                    IsSucceeded = true
-                };
-            }
-
-            private async Task<QueryListResult<TargetReportDto>> HandleRuleTimeQuery(Query message, Infrastructure.Entity.Target target, CancellationToken cancellationToken)
-            {
-                var dt = DateTime.Now.Subtract(TimeSpan.FromMinutes(30));
-
-                var qResult = await _ruleLogRepository.RuleTimeQuery(dt, target);
-
-                var returnResult = new List<TargetReportDto>(30);
-                for (int i = 0; i < 31; i++)
-                {
-                    var refDate = dt.AddMinutes(i);
-
-                    returnResult.Add(new TargetReportDto()
-                    {
-                        Time = dt.AddMinutes(i).ToShortTimeString(),
-                        Value = Convert.ToInt32(qResult.FirstOrDefault(s => s.Time.Minute == refDate.Minute)?.Value ?? 0)
                     });
                 }
 

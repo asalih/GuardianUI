@@ -1,5 +1,7 @@
 ﻿using Guardian.Infrastructure.Entity.Specs;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Guardian.Infrastructure.Entity
@@ -19,6 +21,8 @@ namespace Guardian.Infrastructure.Entity
         public Guid AccountId { get; set; }
 
         public virtual Account Account { get; set; }
+
+        public virtual ICollection<FirewallRule> FirewallRules { get; set; }
 
         public bool UseHttps { get; set; }
 

@@ -31,7 +31,7 @@ namespace Guardian.Infrastructure.Repository.EF
         public override async Task<Target> FirstOrDefault(Expression<Func<Target, bool>> predicate)
             => await DbSet.Where(s => s.AccountId == AccountId).FirstOrDefaultAsync(predicate);
 
-        public async Task<Target> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.AccountId == AccountId);
+        public async Task<Target> GetById(Guid id) => await DbSet.Include(s=>s.FirewallRules).FirstOrDefaultAsync(s => s.Id == id && s.AccountId == AccountId);
 
         public IQueryable<Target> Query() => DbSet.AsQueryable<Target>().Where(s => s.AccountId == AccountId);
     }

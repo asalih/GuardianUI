@@ -1,8 +1,13 @@
 ﻿$(document).ready(function () {
-    var dataHandlerModel = [
-        { chart: "requestChart", header: "REQUEST COUNT (in 30 mins)", type: "request", target: null, labelX: "Time", labelY: "Count" },
-        { chart: "ruleChart", header: "PREVENTED MALFORMED REQUESTS (in 30 mins)", type: "rule", target: null, labelX: "Time", labelY: "Count" },
-        { chart: "ruleTimeChart", header: "MALFORMED REQUESTS LOG EXECUTION TIME (in 30 mins)", type: "ruleTime", target: null, labelX: "Time", labelY: "Millisecond" }
+    var chartDataHandlerModel = [
+        { chart: "requestChart", header: "REQUEST COUNT (in 30 mins)", type: "request", target: null, labelX: "Time", labelY: "Count", interval: 10000 },
+        { chart: "requestTimeChart", header: "ORIGIN HTTP REQUEST TIME (in 30 mins)", type: "requestTime", target: null, labelX: "Time", labelY: "Millisecond", interval: 11000 },
+        { chart: "ruleChart", header: "UNSECURE REQUESTS (in 30 mins)", type: "rule", target: null, labelX: "Time", labelY: "Count", interval: 12000 },
+        { chart: "ruleTimeChart", header: "AVERAGE RULE EXECUTION TIME (in 30 mins)", type: "ruleTime", target: null, labelX: "Time", labelY: "Millisecond", interval: 13000 }
+    ];
+
+    var summaryDataHandlerModel = [
+        { chart: "requestRuleRatio", header: "REQUEST RULE RATIO", type: "requestRuleRatio", target: null, interval: 14000 }
     ];
 
     var initFn = function (data) {
@@ -94,10 +99,30 @@
         });
     };
 
+    var summaryDataHandler = function (data) {
+        $.getJSON("/targets/report/" + $("#id").val() + "?type=" + data.type, function (report) {
+            var $chart = $("#"+data.chart);
+
+            if (report.result.length == 0) {
+                $chart.text(0);
+                return;
+            }
+
+            $chart.text(report.result[0].value);
+        });
+    };
+
     window.setTimeout(function () {
-        for (var i = 0; i < dataHandlerModel.length; i++) {
-            initFn(dataHandlerModel[i]);
-            window.setInterval(dataHandlerFn, 1000 * 10, dataHandlerModel[i]);
+        for (var i = 0; i < chartDataHandlerModel.length; i++) {
+            var dModel = chartDataHandlerModel[i];
+            initFn(dModel);
+            window.setInterval(dataHandlerFn, dModel.interval, dModel);
         }
-    }, 250);
+
+        for (var j = 0; j < summaryDataHandlerModel.length; j++) {
+            var summaryDModel = summaryDataHandlerModel[j];
+            summaryDataHandler(summaryDModel);
+            window.setInterval(summaryDataHandler, summaryDModel.interval, summaryDModel);
+        }
+    }, 200);
 });

@@ -1,0 +1,90 @@
+﻿@model Guardian.Domain.Target.TargetDto
+
+<div class="col-4 p-3">
+    <div class="row">
+        @if (Model.WAFEnabled)
+        {
+            <div class="card mb-4 w-100 shadow-sm border-success">
+                <div class="card-header border-success text-success bg-transparent">
+                    <h4 class="my-0 font-weight-normal">WAF Protection</h4>
+                </div>
+                <div class="card-body text-center text-success">
+                    <h1 class="card-title pricing-card-title">ON</h1>
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card mb-4 w-100 shadow-sm border-danger">
+                <div class="card-header border-danger text-danger bg-transparent">
+                    <h4 class="my-0 font-weight-normal">WAF Protection</h4>
+                </div>
+                <div class="card-body text-center text-danger">
+                    <h1 class="card-title pricing-card-title">OFF</h1>
+
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row">
+        @if (Model.UseHttps)
+        {
+            <div class="card mb-4 w-100 shadow-sm border-success">
+                <div class="card-header border-success text-success bg-transparent">
+                    <h4 class="my-0 font-weight-normal">HSTS</h4>
+                </div>
+                <div class="card-body text-center text-success">
+                    <h1 class="card-title pricing-card-title">ON</h1>
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card mb-4 w-100 shadow-sm border-danger">
+                <div class="card-header border-danger text-danger bg-transparent">
+                    <h4 class="my-0 font-weight-normal">HSTS</h4>
+                </div>
+                <div class="card-body text-center text-danger">
+                    <h1 class="card-title pricing-card-title">OFF</h1>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="col-4 p-3">
+    <div class="card w-100 mb-4 shadow-sm">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Custom Firewall RULES</h4>
+        </div>
+        <div class="card-body text-center">
+            <h1 class="card-title pricing-card-title">@Model.ActiveFirewallRulesCount <small class="text-muted">/ @Model.PassiveFirewallRulesCount</small></h1>
+
+            @if (Model.ActiveFirewallRulesCount == 0)
+            {
+                <div class="mb-4">You do not have active custom rules yet! You can create new one.</div>
+            }
+            else
+            {
+                <div class="mb-4">Active / Passive custom rule count you have!</div>
+            }
+            <a class="btn btn-primary" asp-area="" asp-controller="FirewallRules" asp-action="Create" asp-route-id="@Model.Id">Create</a>
+        </div>
+    </div>
+</div>
+
+<div class="col-4 p-3">
+    <div class="card w-100 mb-4 shadow-sm">
+        <div class="card-header">
+            <h4 class="my-0 font-weight-normal">Request / Rule Time Ratio</h4>
+        </div>
+        <div class="card-body text-center">
+            <h1 class="card-title pricing-card-title"><span id="requestRuleRatio">0</span> <small class="text-muted">%</small></h1>
+
+            <div class="mb-4">Percentage of total time spent for protection!</div>
+        </div>
+    </div>
+</div>

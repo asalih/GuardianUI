@@ -6,6 +6,6 @@ namespace Guardian.Domain.Target
     {
         public string Time { get; set; }
 
-        public int Value { get; set; }
+        public object Value { get; set; }
     }
 }

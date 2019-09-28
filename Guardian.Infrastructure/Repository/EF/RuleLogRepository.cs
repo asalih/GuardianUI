@@ -70,8 +70,8 @@ namespace Guardian.Infrastructure.Repository.EF
 
         public async Task<DBReportResult[]> RuleTimeQuery(DateTime queryTime, Target target)
         {
-            var commandText = "SELECT date_trunc('min', s0.\"CreatedAt\") \"min\", Avg(s0.\"ExecutionMillisecond\") " +
-"FROM \"RuleLogs\" AS s0 " +
+            var commandText = "SELECT date_trunc('min', s0.\"CreatedAt\") \"min\", Avg(s0.\"RuleCheckElapsed\") " +
+"FROM \"HTTPLogs\" AS s0 " +
 "INNER JOIN \"Targets\" AS \"s.Target0\" ON s0.\"TargetId\" = \"s.Target0\".\"Id\" " +
 "WHERE (\"s.Target0\".\"AccountId\" = @AccountId) " +
 "AND (s0.\"TargetId\" = @TargetId) " +

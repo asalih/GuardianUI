@@ -67,5 +67,74 @@ namespace Guardian.Infrastructure.Repository.EF
                 return logs.ToArray();
             }
         }
+
+        public async Task<DBReportResult[]> RequestTimeQuery(DateTime queryTime, Target target)
+        {
+            var commandText = "SELECT date_trunc('min', s0.\"CreatedAt\") \"min\", AVG(\"HttpElapsed\") " +
+"FROM \"HTTPLogs\" AS s0 " +
+"INNER JOIN \"Targets\" AS \"s.Target0\" ON s0.\"TargetId\" = \"s.Target0\".\"Id\" " +
+"WHERE (\"s.Target0\".\"AccountId\" = @AccountId) " +
+"AND (s0.\"TargetId\" = @TargetId) " +
+"AND (s0.\"CreatedAt\" >= @CreatedAt) " +
+"group by 1";
+
+            using (var command = Context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = commandText;
+                command.Parameters.Add(new NpgsqlParameter("@AccountId", AccountId));
+                command.Parameters.Add(new NpgsqlParameter("@TargetId", target.Id));
+                command.Parameters.Add(new NpgsqlParameter("@CreatedAt", queryTime));
+
+                var logs = new List<DBReportResult>();
+
+                Context.Database.OpenConnection();
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    while (await result.ReadAsync())
+                    {
+                        logs.Add(new DBReportResult()
+                        {
+                            Time = result.GetDateTime(0),
+                            Value = Convert.ToInt32(result.GetDouble(1))
+                        });
+                    }
+                }
+
+                return logs.ToArray();
+            }
+        }
+
+        public async Task<DBReportResult> RequestRuleRatioQuery(DateTime queryTime, Target target)
+        {
+            var commandText = "SELECT SUM(\"HttpElapsed\" + \"RuleCheckElapsed\") / SUM(\"RuleCheckElapsed\") \"Ratio\" " +
+"FROM \"HTTPLogs\" AS s0 " +
+"INNER JOIN \"Targets\" AS \"s.Target0\" ON s0.\"TargetId\" = \"s.Target0\".\"Id\" " +
+"WHERE (\"s.Target0\".\"AccountId\" = @AccountId) " +
+"AND (s0.\"TargetId\" = @TargetId) " +
+"AND (s0.\"CreatedAt\" >= @CreatedAt)";
+
+            using (var command = Context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = commandText;
+                command.Parameters.Add(new NpgsqlParameter("@AccountId", AccountId));
+                command.Parameters.Add(new NpgsqlParameter("@TargetId", target.Id));
+                command.Parameters.Add(new NpgsqlParameter("@CreatedAt", queryTime));
+
+                Context.Database.OpenConnection();
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    if (await result.ReadAsync())
+                    {
+                        return new DBReportResult()
+                        {
+                            Time = queryTime,
+                            Value = result.GetDouble(0).ToString("0.##")
+                        };
+                    }
+                }
+
+                return null;
+            }
+        }
     }
 }

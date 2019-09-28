@@ -17,7 +17,7 @@ namespace Guardian.Domain.Target
         [Display(Name = "Origin IP Address")]
         public string OriginIpAddress { get; set; }
 
-        [Display(Name="Certificate Key")]
+        [Display(Name = "Certificate Key")]
         public string CertKey { get; set; }
 
         [Display(Name = "Certificate")]
@@ -30,5 +30,9 @@ namespace Guardian.Domain.Target
         public bool WAFEnabled { get; set; }
 
         public bool IsVerified { get; set; }
+
+        public int ActiveFirewallRulesCount { get; set; }
+
+        public int PassiveFirewallRulesCount { get; set; }
     }
 }

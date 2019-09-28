@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Guardian.Web.UI</title>
+    <title>@ViewData["Title"] - Guardian</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -40,7 +40,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="@(ViewBag.WideContainer == true ? "container-fluid" : "container")">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
 

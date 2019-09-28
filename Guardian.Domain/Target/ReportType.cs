@@ -3,7 +3,9 @@
     public enum ReportType
     {
         Request,
+        RequestTime,
         Rule,
-        RuleTime
+        RuleTime,
+        RequestRuleRatio
     }
 }

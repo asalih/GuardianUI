@@ -129,7 +129,7 @@ namespace Guardian.Web.UI.Controllers
 
             Alert(AlertTypes.Success, "Target successfully added!");
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = result.Result.Id });
         }
 
         [HttpPost]
@@ -153,7 +153,7 @@ namespace Guardian.Web.UI.Controllers
 
             Alert(AlertTypes.Success, "Target successfully updated!");
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new { id = result.Result.Id });
         }
 
         [HttpPost]
