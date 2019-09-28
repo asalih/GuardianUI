@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20190923210346_InitialCreate")]
+    [Migration("20190927212949_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,6 +115,8 @@ namespace Guardian.Infrastructure.Migrations
                     b.Property<bool>("IsHitted");
 
                     b.Property<int>("LogType");
+
+                    b.Property<string>("RequestUri");
 
                     b.Property<Guid>("TargetId");
 

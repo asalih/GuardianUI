@@ -1,10 +1,11 @@
 ﻿$(document).ready(function () {
     var dataHandlerModel = [
-        { chart: "requestChart", type: "request", handler: function () { } },
-        { chart: "ruleChart", type: "rule", handler: function () { } }
+        { chart: "requestChart", header: "REQUEST COUNT (in 30 mins)", type: "request", target: null, labelX: "Time", labelY: "Count" },
+        { chart: "ruleChart", header: "PREVENTED MALFORMED REQUESTS (in 30 mins)", type: "rule", target: null, labelX: "Time", labelY: "Count" },
+        { chart: "ruleTimeChart", header: "MALFORMED REQUESTS LOG EXECUTION TIME (in 30 mins)", type: "ruleTime", target: null, labelX: "Time", labelY: "Millisecond" }
     ];
 
-    var handlerFn = function (data) {
+    var initFn = function (data) {
         $.getJSON("/targets/report/" + $("#id").val() + "?type=" + data.type, function (report) {
 
             if (report.result.length == 0) {
@@ -15,11 +16,11 @@
             var dataSet = [];
 
             for (var i = 0; i < report.result.length; i++) {
-                labels.push(report.result[i].dateTime);
+                labels.push(report.result[i].time);
                 dataSet.push(report.result[i].value);
             }
 
-            var chart = new Chart(document.getElementById(data.chart),
+            data.target = new Chart(document.getElementById(data.chart),
                 {
                     type: 'line',
                     data: {
@@ -36,10 +37,13 @@
                         ]
                     },
                     options: {
+                        legend: {
+                            display: false
+                        },
                         responsive: true,
                         title: {
                             display: true,
-                            text: 'Chart.js Line Chart'
+                            text: data.header
                         },
                         tooltips: {
                             mode: 'index',
@@ -54,14 +58,14 @@
                                 display: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Month'
+                                    labelString: data.labelX
                                 }
                             }],
                             yAxes: [{
                                 display: true,
                                 scaleLabel: {
                                     display: true,
-                                    labelString: 'Value'
+                                    labelString: data.labelY
                                 }
                             }]
                         }
@@ -70,9 +74,30 @@
         });
     };
 
+    var dataHandlerFn = function (data) {
+        $.getJSON("/targets/report/" + $("#id").val() + "?type=" + data.type, function (report) {
+            if (report.result.length == 0) {
+                return;
+            }
+
+            var labels = data.target.data.labels = [];
+            var dataSet = data.target.data.datasets[0].data = [];
+
+            for (var i = 0; i < report.result.length; i++) {
+                labels.push(report.result[i].time);
+                dataSet.push(report.result[i].value);
+            }
+
+            data.target.labels = labels;
+            data.target.data.datasets[0].data = dataSet;
+            data.target.update();
+        });
+    };
+
     window.setTimeout(function () {
         for (var i = 0; i < dataHandlerModel.length; i++) {
-            window.setInterval(handlerFn, 5000, dataHandlerModel[i]);
+            initFn(dataHandlerModel[i]);
+            window.setInterval(dataHandlerFn, 1000 * 10, dataHandlerModel[i]);
         }
     }, 250);
 });

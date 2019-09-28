@@ -13,6 +13,6 @@ namespace Guardian.Infrastructure.Entity
         public LogType LogType { get; set; }
         public string Description { get; set; }
         public Guid? FirewallRuleId { get; set; }
-        
+        public string RequestUri { get; set; }
     }
 }

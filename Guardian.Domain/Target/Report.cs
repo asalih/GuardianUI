@@ -3,6 +3,7 @@ using Guardian.Infrastructure.Repository.Specs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace Guardian.Domain.Target
             public Query(Guid id, ReportType type)
             {
                 TargetId = id;
+                ReportType = type;
             }
 
             public Guid TargetId { get; }
@@ -58,6 +60,8 @@ namespace Guardian.Domain.Target
                         return await HandleRequestQuery(message, target, cancellationToken);
                     case ReportType.Rule:
                         return await HandleRuleQuery(message, target, cancellationToken);
+                    case ReportType.RuleTime:
+                        return await HandleRuleTimeQuery(message, target, cancellationToken);
                     default:
                         break;
                 }
@@ -70,20 +74,23 @@ namespace Guardian.Domain.Target
             {
                 var dt = DateTime.Now.Subtract(TimeSpan.FromMinutes(30));
 
-                var query = from log in _logRepository.Query()
-                              where log.TargetId == target.Id && log.CreatedAt >= dt
-                              group log by log.CreatedAt.Minute into g
-                              select new { Minute = g.Key, Count = g.Count() };
+                var qResult = await _logRepository.RequestQuery(dt, target);
 
-                var results = await query.ToListAsync(cancellationToken);
+                var returnResult = new List<TargetReportDto>(30);
+                for (int i = 0; i < 31; i++)
+                {
+                    var refDate = dt.AddMinutes(i);
+
+                    returnResult.Add(new TargetReportDto()
+                    {
+                        Time = refDate.ToShortTimeString(),
+                        Value = qResult.FirstOrDefault(s => s.Time.Minute == refDate.Minute)?.Value ?? 0
+                    });
+                }
 
                 return new QueryListResult<TargetReportDto>()
                 {
-                    Result = results.Select(s => new TargetReportDto
-                    {
-                        DateTime = dt.AddMinutes(s.Minute),
-                        Value = s.Count
-                    }).ToList(),
+                    Result = returnResult,
                     IsSucceeded = true
                 };
             }
@@ -92,20 +99,48 @@ namespace Guardian.Domain.Target
             {
                 var dt = DateTime.Now.Subtract(TimeSpan.FromMinutes(30));
 
-                var query = from log in _ruleLogRepository.Query()
-                            where log.TargetId == target.Id && log.CreatedAt >= dt
-                            group log by log.CreatedAt.Minute into g
-                            select new { Minute = g.Key, Count = g.Count() };
+                var qResult = await _ruleLogRepository.RuleQuery(dt, target);
 
-                var results = await query.ToListAsync(cancellationToken);
+                var returnResult = new List<TargetReportDto>(30);
+                for (int i = 0; i < 31; i++)
+                {
+                    var refDate = dt.AddMinutes(i);
+
+                    returnResult.Add(new TargetReportDto()
+                    {
+                        Time = dt.AddMinutes(i).ToShortTimeString(),
+                        Value = qResult.FirstOrDefault(s => s.Time.Minute == refDate.Minute)?.Value ?? 0
+                    });
+                }
 
                 return new QueryListResult<TargetReportDto>()
                 {
-                    Result = results.Select(s => new TargetReportDto
+                    Result = returnResult,
+                    IsSucceeded = true
+                };
+            }
+
+            private async Task<QueryListResult<TargetReportDto>> HandleRuleTimeQuery(Query message, Infrastructure.Entity.Target target, CancellationToken cancellationToken)
+            {
+                var dt = DateTime.Now.Subtract(TimeSpan.FromMinutes(30));
+
+                var qResult = await _ruleLogRepository.RuleTimeQuery(dt, target);
+
+                var returnResult = new List<TargetReportDto>(30);
+                for (int i = 0; i < 31; i++)
+                {
+                    var refDate = dt.AddMinutes(i);
+
+                    returnResult.Add(new TargetReportDto()
                     {
-                        DateTime = dt.AddMinutes(s.Minute),
-                        Value = s.Count
-                    }).ToList(),
+                        Time = dt.AddMinutes(i).ToShortTimeString(),
+                        Value = Convert.ToInt32(qResult.FirstOrDefault(s => s.Time.Minute == refDate.Minute)?.Value ?? 0)
+                    });
+                }
+
+                return new QueryListResult<TargetReportDto>()
+                {
+                    Result = returnResult,
                     IsSucceeded = true
                 };
             }

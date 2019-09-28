@@ -115,7 +115,8 @@ namespace Guardian.Infrastructure.Migrations
                     ExecutionMillisecond = table.Column<int>(nullable: false),
                     LogType = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    FirewallRuleId = table.Column<Guid>(nullable: true)
+                    FirewallRuleId = table.Column<Guid>(nullable: true),
+                    RequestUri = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

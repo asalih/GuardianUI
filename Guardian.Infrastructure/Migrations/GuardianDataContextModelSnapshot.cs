@@ -114,6 +114,8 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<int>("LogType");
 
+                    b.Property<string>("RequestUri");
+
                     b.Property<Guid>("TargetId");
 
                     b.HasKey("Id");

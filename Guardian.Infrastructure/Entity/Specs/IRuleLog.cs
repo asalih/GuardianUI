@@ -15,5 +15,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         LogType LogType { get; set; }
 
         string Description { get; set; }
+
+        string RequestUri { get; set; }
     }
 }

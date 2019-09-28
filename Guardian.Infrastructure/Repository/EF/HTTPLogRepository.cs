@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Guardian.Infrastructure.Entity;
 using Guardian.Infrastructure.Repository.Specs;
 using Guardian.Infrastructure.Security.Specs;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Guardian.Infrastructure.Repository.EF
 {
@@ -29,5 +31,41 @@ namespace Guardian.Infrastructure.Repository.EF
         public async Task<HTTPLog> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id && s.Target.AccountId == AccountId);
 
         public IQueryable<HTTPLog> Query() => DbSet.AsQueryable<HTTPLog>().Where(s => s.Target.AccountId == AccountId);
+
+        public async Task<DBReportResult[]> RequestQuery(DateTime queryTime, Target target)
+        {
+            var commandText = "SELECT date_trunc('min', s0.\"CreatedAt\") \"min\", COUNT(1) " +
+"FROM \"HTTPLogs\" AS s0 " +
+"INNER JOIN \"Targets\" AS \"s.Target0\" ON s0.\"TargetId\" = \"s.Target0\".\"Id\" " +
+"WHERE (\"s.Target0\".\"AccountId\" = @AccountId) " +
+"AND (s0.\"TargetId\" = @TargetId) " +
+"AND (s0.\"CreatedAt\" >= @CreatedAt) " +
+"group by 1";
+
+            using (var command = Context.Database.GetDbConnection().CreateCommand())
+            {
+                command.CommandText = commandText;
+                command.Parameters.Add(new NpgsqlParameter("@AccountId", AccountId));
+                command.Parameters.Add(new NpgsqlParameter("@TargetId", target.Id));
+                command.Parameters.Add(new NpgsqlParameter("@CreatedAt", queryTime));
+
+                var logs = new List<DBReportResult>();
+
+                Context.Database.OpenConnection();
+                using (var result = await command.ExecuteReaderAsync())
+                {
+                    while (await result.ReadAsync())
+                    {
+                        logs.Add(new DBReportResult()
+                        {
+                            Time = result.GetDateTime(0),
+                            Value = Convert.ToInt32(result.GetDouble(1))
+                        });
+                    }
+                }
+
+                return logs.ToArray();
+            }
+        }
     }
 }

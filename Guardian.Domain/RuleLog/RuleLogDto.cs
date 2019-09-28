@@ -15,5 +15,6 @@ namespace Guardian.Domain.RuleLog
         public string Description { get; set; }
         public Guid TargetId { get; set; }
         public virtual TargetDto Target { get; set; }
+        public string RequestUri { get; set; }
     }
 }
