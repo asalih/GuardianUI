@@ -170,7 +170,7 @@ namespace Guardian.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
-                        .WithMany()
+                        .WithMany("FirewallRules")
                         .HasForeignKey("TargetId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -186,7 +186,7 @@ namespace Guardian.Infrastructure.Migrations
             modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
                 {
                     b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "FirewallRule")
-                        .WithMany()
+                        .WithMany("RuleLogs")
                         .HasForeignKey("FirewallRuleId");
 
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")

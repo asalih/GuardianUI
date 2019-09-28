@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20190927212949_InitialCreate")]
+    [Migration("20190928191028_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -172,7 +172,7 @@ namespace Guardian.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
-                        .WithMany()
+                        .WithMany("FirewallRules")
                         .HasForeignKey("TargetId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -188,7 +188,7 @@ namespace Guardian.Infrastructure.Migrations
             modelBuilder.Entity("Guardian.Infrastructure.Entity.RuleLog", b =>
                 {
                     b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "FirewallRule")
-                        .WithMany()
+                        .WithMany("RuleLogs")
                         .HasForeignKey("FirewallRuleId");
 
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")

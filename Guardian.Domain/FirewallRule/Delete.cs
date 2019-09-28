@@ -14,14 +14,14 @@ namespace Guardian.Domain.FirewallRule
     {
         public class Command : IRequest<CommandResult<FirewallRuleDto>>
         {
-            public FirewallRuleDto FirewallRule { get; set; }
+            public Guid Id { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                DefaultValidatorExtensions.NotNull(RuleFor(x => x.FirewallRule.Id)).NotEmpty();
+                DefaultValidatorExtensions.NotNull(RuleFor(x => x.Id)).NotEmpty();
             }
         }
 
@@ -38,7 +38,7 @@ namespace Guardian.Domain.FirewallRule
 
             public async Task<CommandResult<FirewallRuleDto>> Handle(Command message, CancellationToken cancellationToken)
             {
-                var wafRule = await _repository.GetById(message.FirewallRule.Id);
+                var wafRule = await _repository.GetById(message.Id);
 
                 if (wafRule == null)
                 {
@@ -50,6 +50,7 @@ namespace Guardian.Domain.FirewallRule
 
                 return new CommandResult<FirewallRuleDto>()
                 {
+                    Result = _mapper.Map<FirewallRuleDto>(wafRule),
                     IsSucceeded = await _repository.Remove(wafRule) > 0
                 };
             }

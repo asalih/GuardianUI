@@ -5,7 +5,11 @@ namespace Guardian.Infrastructure.Entity
 {
     public class EntityBase : IEntityBase
     {
-        public EntityBase() => CreatedAt = DateTimeOffset.UtcNow;
+        public EntityBase()
+        {
+            Id = Guid.NewGuid();
+            CreatedAt = DateTimeOffset.UtcNow;
+        }
 
         public Guid Id { get; set; }
 

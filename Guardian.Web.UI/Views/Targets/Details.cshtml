@@ -18,19 +18,26 @@
                     {
                         <i class="fas fa-times-circle text-danger"></i>
                     }
-                </small> @Model.Domain<small>
+                </small> @Model.Domain
+                <small>
                     / @Model.OriginIpAddress
                 </small>
-            </h3>
-        </div>
 
-        <div class="col-4 align-self-center">
-            <form asp-action="Delete" class="float-right">
-                @Html.Hidden("id", Model.Id)
-                <a class="btn btn-sm btn-info" asp-action="Update" asp-route-id="@Model.Id">Edit</a>
-                <a class="btn btn-sm btn-dark" asp-action="Index" asp-controller="FirewallRules" asp-route-id="@Model.Id">Firewall Rules</a>
-                <button class="btn btn-sm btn-danger">Delete</button>
-            </form>
+                <span class="btn-group">
+                    <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <span class="dropdown-menu dropdown-menu-right" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 31px, 0px);">
+                        <a class="dropdown-item" asp-action="Update" asp-route-id="@Model.Id">Edit</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="FirewallRules" asp-route-id="@Model.Id">Firewall Rules</a>
+                        <span class="dropdown-divider"></span>
+                        <form asp-action="Delete" class="">
+                            @Html.Hidden("id", Model.Id)
+
+
+                            <button class="dropdown-item" type="submit">Delete</button>
+                        </form>
+                    </span>
+                </span>
+            </h3>
         </div>
     </div>
 

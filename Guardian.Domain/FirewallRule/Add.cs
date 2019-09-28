@@ -2,6 +2,7 @@
 using Guardian.Infrastructure.Repository.Specs;
 using Guardian.Infrastructure.Security.Specs;
 using MediatR;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,7 +25,8 @@ namespace Guardian.Domain.FirewallRule
             public QueryHandler(IFirewallRuleRepository repository,
                 IMapper mapper,
                 IIdentityHelper identityHelper,
-                ITargetRepository targetRepository)
+                ITargetRepository targetRepository,
+                IRuleLogRepository logRepo)
             {
                 _repository = repository;
                 _mapper = mapper;
@@ -35,8 +37,8 @@ namespace Guardian.Domain.FirewallRule
             public async Task<CommandResult<FirewallRuleDto>> Handle(Command message, CancellationToken cancellationToken)
             {
                 var target = await _targetRepository.FirstOrDefault(s => s.Id == message.FirewallRule.TargetId);
-                
-                if(target == null)
+
+                if (target == null)
                 {
                     return new CommandResult<FirewallRuleDto>()
                     {
@@ -45,9 +47,14 @@ namespace Guardian.Domain.FirewallRule
                     };
                 }
 
+                message.FirewallRule.Id = Guid.NewGuid();
+                message.FirewallRule.CreatedAt = DateTime.UtcNow;
+
                 var firewallRule = _mapper.Map<Infrastructure.Entity.FirewallRule>(message.FirewallRule);
 
                 await _repository.Add(firewallRule);
+
+
 
                 return new CommandResult<FirewallRuleDto>()
                 {

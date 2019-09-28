@@ -126,7 +126,7 @@ namespace Guardian.Infrastructure.Migrations
                         column: x => x.FirewallRuleId,
                         principalTable: "FirewallRules",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RuleLogs_Targets_TargetId",
                         column: x => x.TargetId,

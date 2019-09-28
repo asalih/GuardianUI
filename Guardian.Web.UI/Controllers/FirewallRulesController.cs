@@ -111,21 +111,11 @@ namespace Guardian.Web.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid ruleId)
         {
-            var firewallRule = await _mediator.Send(new Details.Query(id));
-
-            if (firewallRule == null)
-            {
-                return NotFound();
-            }
-
             var result = await _mediator.Send(new Delete.Command()
             {
-                FirewallRule = new FirewallRuleDto()
-                {
-                    Id = id
-                }
+                Id = ruleId
             });
 
             if (result.IsSucceeded)
@@ -137,7 +127,12 @@ namespace Guardian.Web.UI.Controllers
                 Alert(AlertTypes.Error, "Firewall Rule couldn't deleted!");
             }
 
-            return RedirectToAction(nameof(Index), new { id = firewallRule.Result.Target.Id });
+            if(result.Result?.TargetId == null)
+            {
+                return RedirectToAction(nameof(Index), "Targets");
+            }
+
+            return RedirectToAction(nameof(Index), new { id = result.Result.TargetId });
         }
     }
 }
