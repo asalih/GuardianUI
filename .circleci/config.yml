@@ -19,4 +19,4 @@ jobs:
           command: scp -o StrictHostKeyChecking=no -r /root/project/publish/* root@guardian-waf.com://applications/guardianui/
       - run:
           name: Service Restart
-          command: systemctl --host root@guardian-waf.com restart guardianui.service
+          command: ssh root@guardian-waf.com systemctl restart guardianui.service
