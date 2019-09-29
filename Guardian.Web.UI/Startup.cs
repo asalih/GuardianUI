@@ -112,6 +112,21 @@ namespace Guardian.Web.UI
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            UpdateDatabase(app);
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<GuardianDataContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
