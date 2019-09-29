@@ -38,5 +38,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+   <DefineConstants>TRACE;DEBUG;NETCOREAPP2_2</DefineConstants>
+ </PropertyGroup>
 
 </Project>

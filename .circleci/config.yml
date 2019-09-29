@@ -14,3 +14,6 @@ jobs:
       - run:
           name: Build
           command: dotnet cake build.cake --runtime=linux-x64
+      - run:
+          name: Deploy
+          command: scp -o StrictHostKeyChecking=no -r ./dist/GuardianUI/publish/* username@example.com:///applications/guardianui/
