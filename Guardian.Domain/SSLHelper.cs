@@ -26,6 +26,7 @@ namespace Guardian.Domain
 
         public static SSL CreateSSL(string domain)
         {
+            return CreateSelfSignedSSLForLinux(domain);
             return Infrastructure.OperatingSystem.IsWindows() ?
                 CreateSelfSignedSSLForWin(domain) :
                 CreateSelfSignedSSLForLinux(domain);
@@ -89,7 +90,8 @@ namespace Guardian.Domain
             {
                 StartInfo = new ProcessStartInfo($"{openSSLDir}\\openssl-gen.sh", args)
                 {
-                    UseShellExecute = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true
                 }
             };
             psi.Start();
