@@ -90,11 +90,11 @@ namespace Guardian.Domain
 
             File.WriteAllText(configFilePath, configFileContent);
 
-            var args = string.Format(linuxCmd, domain, baseFileName, openSSLDir, configFilePath);
+            var args = string.Format("{0} {1} {2} {3}", domain, baseFileName, openSSLDir, configFilePath);
 
             var psi = new Process
             {
-                StartInfo = new ProcessStartInfo($"/usr/bin/openssl", args)
+                StartInfo = new ProcessStartInfo($"{openSSLDir}/openssl-gen.sh", args)
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
