@@ -85,7 +85,7 @@ namespace Guardian.Domain
 
             //Load base config file, append needed data and save for later usage
             var configFilePath = Path.Combine(openSSLDir, $"{baseFileName}.cnf");
-            var configFileContent = File.ReadAllText("/etc/ssl/openssl.cnf") +
+            var configFileContent = File.ReadAllText(Path.Combine(openSSLDir, "openssl_lx.cnf")).Replace("{dir_placeholder}", openSSLDir + "\\ssl") +
                     $"[SAN]\nsubjectAltName=DNS:{domain}";
 
             File.WriteAllText(configFilePath, configFileContent);
