@@ -83,7 +83,7 @@ namespace Guardian.Domain
             var openSSLDir = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "openssl");
 
             var baseFileName = Guid.NewGuid().ToString("N");
-            var args = string.Format(winCmd, domain, baseFileName, openSSLDir);
+            var args = string.Format(linuxCmd, domain, baseFileName, openSSLDir);
 
             var psi = new Process
             {
@@ -104,8 +104,6 @@ namespace Guardian.Domain
                 CertCrt = File.ReadAllText(certCrtPath),
                 CertKey = File.ReadAllText(certKeyPath)
             };
-
-            InstallCertificate(certCrtPath);
 
             //Lets clear the path.
             File.Delete(certCrtPath);
