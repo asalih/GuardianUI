@@ -90,7 +90,7 @@ namespace Guardian.Domain
 
             File.WriteAllText(configFilePath, configFileContent);
 
-            var args = string.Format("{0} {1} {2} {3}", domain, baseFileName, openSSLDir, configFilePath);
+            var args = string.Format("'{0}' '{1}' '{2}' '{3}'", domain, baseFileName, openSSLDir, configFilePath);
 
             try
             {
