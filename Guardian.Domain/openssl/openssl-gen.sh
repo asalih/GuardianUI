@@ -1,4 +1,4 @@
-﻿openssl req \
+﻿/usr/bin/openssl req \
 -newkey rsa:2048 \
 -x509 \
 -nodes \

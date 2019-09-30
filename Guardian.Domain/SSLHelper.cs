@@ -19,14 +19,12 @@ namespace Guardian.Domain
 "-subj /CN={0} \\" +
 "-reqexts SAN \\" +
 "-extensions SAN \\" +
-"-config<(cat /etc/ssl/openssl.cnf \\" +
-"    <(printf '[SAN]\nsubjectAltName=DNS:{0}')) \\" +
+"-config {3} \\" +
 "-sha256 \\" +
 "-days 3650";
 
         public static SSL CreateSSL(string domain)
         {
-            return CreateSelfSignedSSLForLinux(domain);
             return Infrastructure.OperatingSystem.IsWindows() ?
                 CreateSelfSignedSSLForWin(domain) :
                 CreateSelfSignedSSLForLinux(domain);
@@ -84,11 +82,19 @@ namespace Guardian.Domain
             var openSSLDir = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "openssl");
 
             var baseFileName = Guid.NewGuid().ToString("N");
-            var args = string.Format("{0} {1} {2}", domain, baseFileName, openSSLDir);
+
+            //Load base config file, append needed data and save for later usage
+            var configFilePath = Path.Combine(openSSLDir, $"{baseFileName}.cnf");
+            var configFileContent = File.ReadAllText("/etc/ssl/openssl.cnf") +
+                    $"[SAN]\nsubjectAltName=DNS:{domain}";
+
+            File.WriteAllText(configFilePath, configFileContent);
+
+            var args = string.Format(linuxCmd, domain, baseFileName, openSSLDir, configFilePath);
 
             var psi = new Process
             {
-                StartInfo = new ProcessStartInfo($"{openSSLDir}\\openssl-gen.sh", args)
+                StartInfo = new ProcessStartInfo($"/usr/bin/openssl", args)
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true
@@ -110,6 +116,7 @@ namespace Guardian.Domain
             //Lets clear the path.
             File.Delete(certCrtPath);
             File.Delete(certKeyPath);
+            File.Delete(configFilePath);
 
             return result;
         }
