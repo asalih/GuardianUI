@@ -1,4 +1,4 @@
-﻿/usr/bin/openssl req \
+﻿openssl req \
 -newkey rsa:2048 \
 -x509 \
 -nodes \
@@ -8,7 +8,6 @@
 -subj /CN=$1 \
 -reqexts SAN \
 -extensions SAN \
--config <(cat /etc/ssl/openssl.cnf \
-    <(printf '[SAN]\nsubjectAltName=DNS:$1')) \
+-config $4 \
 -sha256 \
 -days 3650
