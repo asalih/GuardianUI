@@ -83,11 +83,11 @@ namespace Guardian.Domain
             var openSSLDir = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "openssl");
 
             var baseFileName = Guid.NewGuid().ToString("N");
-            var args = string.Format(linuxCmd, domain, baseFileName, openSSLDir);
+            var args = string.Format("{0} {1} {2}", domain, baseFileName, openSSLDir);
 
             var psi = new Process
             {
-                StartInfo = new ProcessStartInfo("openssl", args)
+                StartInfo = new ProcessStartInfo($"{openSSLDir}\\openssl-gen.sh", args)
                 {
                     UseShellExecute = true,
                 }

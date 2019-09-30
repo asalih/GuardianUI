@@ -31,6 +31,9 @@
     <None Update="openssl\msys-z.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="openssl\openssl-gen.sh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="openssl\openssl.cnf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
