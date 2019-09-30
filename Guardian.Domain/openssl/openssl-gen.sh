@@ -1,4 +1,6 @@
-﻿openssl req \
+﻿#!/bin/sh
+pushd /applications/guardianui/openssl
+openssl req \
 -newkey rsa:2048 \
 -x509 \
 -nodes \
@@ -11,3 +13,4 @@
 -config $4 \
 -sha256 \
 -days 3650
+popd
