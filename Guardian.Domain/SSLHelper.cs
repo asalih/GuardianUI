@@ -106,7 +106,11 @@ namespace Guardian.Domain
             while (!psi.StandardOutput.EndOfStream)
             {
                 line += psi.StandardOutput.ReadLine();
-                
+            }
+
+            while (!psi.StandardError.EndOfStream)
+            {
+                line += psi.StandardError.ReadLine();
             }
 
             if (!string.IsNullOrEmpty(line))
