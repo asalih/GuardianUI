@@ -92,35 +92,42 @@ namespace Guardian.Domain
 
             var args = string.Format("{0} {1} {2} {3}", domain, baseFileName, openSSLDir, configFilePath);
 
-            var psi = new Process
+            try
             {
-                StartInfo = new ProcessStartInfo($"{openSSLDir}/openssl-gen.sh", args)
+                var psi = new Process
                 {
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true
+                    StartInfo = new ProcessStartInfo($"{openSSLDir}/openssl-gen.sh", args)
+                    {
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    }
+                };
+                psi.Start();
+
+                var line = "";
+                while (!psi.StandardOutput.EndOfStream)
+                {
+                    line += psi.StandardOutput.ReadLine();
                 }
-            };
-            psi.Start();
 
-            var line = "";
-            while (!psi.StandardOutput.EndOfStream)
-            {
-                line += psi.StandardOutput.ReadLine();
+                while (!psi.StandardError.EndOfStream)
+                {
+                    line += psi.StandardError.ReadLine();
+                }
+
+                if (!string.IsNullOrEmpty(line))
+                {
+                    line = $"{openSSLDir}/openssl-gen.sh {args}{Environment.NewLine}" + line;
+                    throw new Exception(line);
+                }
+
+                psi.WaitForExit();
             }
-
-            while (!psi.StandardError.EndOfStream)
+            catch (Exception ex)
             {
-                line += psi.StandardError.ReadLine();
+                throw new Exception($"{openSSLDir}/openssl-gen.sh {args}{Environment.NewLine}", ex);
             }
-
-            if (!string.IsNullOrEmpty(line))
-            {
-                line = $"{openSSLDir}/openssl-gen.sh {args}{Environment.NewLine}" + line;
-                throw new Exception(line);
-            }
-
-            psi.WaitForExit();
 
             var certCrtPath = Path.Combine(openSSLDir, $"{baseFileName}.crt");
             var certKeyPath = Path.Combine(openSSLDir, $"{baseFileName}.key");
