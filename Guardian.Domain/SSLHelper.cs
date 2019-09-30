@@ -94,7 +94,7 @@ namespace Guardian.Domain
 
             var psi = new Process
             {
-                StartInfo = new ProcessStartInfo($"./{openSSLDir}/openssl-gen.sh", args)
+                StartInfo = new ProcessStartInfo($"{openSSLDir}/openssl-gen.sh", args)
                 {
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
