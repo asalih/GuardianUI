@@ -102,6 +102,18 @@ namespace Guardian.Domain
             };
             psi.Start();
 
+            var line = "";
+            while (!psi.StandardOutput.EndOfStream)
+            {
+                line += psi.StandardOutput.ReadLine();
+                
+            }
+
+            if (!string.IsNullOrEmpty(line))
+            {
+                throw new Exception(line);
+            }
+
             psi.WaitForExit();
 
             var certCrtPath = Path.Combine(openSSLDir, $"{baseFileName}.crt");
