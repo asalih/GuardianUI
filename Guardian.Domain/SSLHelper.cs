@@ -97,7 +97,8 @@ namespace Guardian.Domain
                 StartInfo = new ProcessStartInfo($"/usr/bin/openssl", args)
                 {
                     UseShellExecute = false,
-                    RedirectStandardOutput = true
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
                 }
             };
             psi.Start();
