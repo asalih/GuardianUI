@@ -9,19 +9,21 @@ namespace Guardian.Domain
     public static class SSLHelper
     {
         private const string winCmd = "req -newkey rsa:2048 -x509 -nodes -keyout {2}\\{1}.key -new -out {2}\\{1}.crt -subj \"/CN={0}\" -reqexts SAN -extensions SAN -config \"{3}\" -sha256 -days 3650";
-        private const string linuxCmd = "req \\ " +
-"- newkey rsa:2048 \\" +
-"-x509 \\" +
-"-nodes \\" +
-"-keyout {2}\\{1}.key \\" +
-"-new \\" +
-"-out {2}\\{1}.crt \\" +
-"-subj /CN={0} \\" +
-"-reqexts SAN \\" +
-"-extensions SAN \\" +
-"-config {3} \\" +
-"-sha256 \\" +
-"-days 3650";
+
+        private const string linuxCmd = "req -newkey rsa:2048 -x509 -nodes -keyout {2}\\{1}.key -new -out {2}\\{1}.crt -subj /CN={0} -reqexts SAN -extensions SAN -config {3} sha256 -days 3650";
+        //        private const string linuxCmd = "req \\ " +
+        //"- newkey rsa:2048 \\" +
+        //"-x509 \\" +
+        //"-nodes \\" +
+        //"-keyout {2}\\{1}.key \\" +
+        //"-new \\" +
+        //"-out {2}\\{1}.crt \\" +
+        //"-subj /CN={0} \\" +
+        //"-reqexts SAN \\" +
+        //"-extensions SAN \\" +
+        //"-config {3} \\" +
+        //"-sha256 \\" +
+        //"-days 3650";
 
         public static SSL CreateSSL(string domain)
         {
@@ -90,17 +92,18 @@ namespace Guardian.Domain
 
             File.WriteAllText(configFilePath, configFileContent);
 
-            var args = string.Format("'{0}' '{1}' '{2}' '{3}'", domain, baseFileName, openSSLDir, configFilePath);
+            var args = string.Format(linuxCmd, domain, baseFileName, openSSLDir, configFilePath).Replace("\"", "\\\"");
 
             try
             {
                 var psi = new Process
                 {
-                    StartInfo = new ProcessStartInfo($"{openSSLDir}/openssl-gen.sh", args)
+                    StartInfo = new ProcessStartInfo($"/bin/bash", $"-c \"{args}\"")
                     {
                         UseShellExecute = false,
                         RedirectStandardOutput = true,
-                        RedirectStandardError = true
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
                     }
                 };
                 psi.Start();
