@@ -125,6 +125,11 @@ namespace Guardian.Web.UI.Controllers
 
             if (!result.IsSucceeded)
             {
+                if (!string.IsNullOrEmpty(result.Message))
+                {
+                    Alert(AlertTypes.Error, result.Message);
+                }
+
                 return View(model);
             }
 

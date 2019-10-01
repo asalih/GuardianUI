@@ -38,7 +38,8 @@ namespace Guardian.Domain.Target
                 {
                     return new CommandResult<TargetDto>()
                     {
-                        IsSucceeded = false
+                        IsSucceeded = false,
+                        Message = "Target in use."
                     };
                 }
 
