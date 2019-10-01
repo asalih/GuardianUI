@@ -63,6 +63,7 @@ namespace Guardian.Web.UI.Controllers
             return Json(report);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             if (id == Guid.Empty)
