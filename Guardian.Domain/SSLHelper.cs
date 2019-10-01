@@ -27,6 +27,7 @@ namespace Guardian.Domain
 
         public static SSL CreateSSL(string domain)
         {
+            return CreateSelfSignedSSLForLinux(domain);
             return Infrastructure.OperatingSystem.IsWindows() ?
                 CreateSelfSignedSSLForWin(domain) :
                 CreateSelfSignedSSLForLinux(domain);
@@ -87,7 +88,7 @@ namespace Guardian.Domain
 
             //Load base config file, append needed data and save for later usage
             var configFilePath = Path.Combine(openSSLDir, $"{baseFileName}.cnf");
-            var configFileContent = File.ReadAllText(Path.Combine(openSSLDir, "openssl_lx.cnf")).Replace("{dir_placeholder}", openSSLDir + "\\ssl") +
+            var configFileContent = File.ReadAllText(Path.Combine(openSSLDir, "openssl_lx.cnf")).Replace("{dir_placeholder}", openSSLDir + "/ssl") +
                     $"[SAN]\nsubjectAltName=DNS:{domain}";
 
             File.WriteAllText(configFilePath, configFileContent);
@@ -121,7 +122,7 @@ namespace Guardian.Domain
 
                 if (!string.IsNullOrEmpty(line))
                 {
-                    line = $"{openSSLDir}/openssl-gen.sh {args}{Environment.NewLine}" + line;
+                    line = $"/bin/bash {args}{Environment.NewLine}" + line;
                     throw new Exception(line);
                 }
 
