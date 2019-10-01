@@ -95,6 +95,7 @@ namespace Guardian.Domain
 
             var args = string.Format(linuxCmd, domain, baseFileName, openSSLDir, configFilePath).Replace("\"", "\\\"");
 
+            var line = "";
             try
             {
                 var psi = new Process
@@ -109,7 +110,6 @@ namespace Guardian.Domain
                 };
                 psi.Start();
 
-                var line = "";
                 while (!psi.StandardOutput.EndOfStream)
                 {
                     line += psi.StandardOutput.ReadLine();
@@ -122,32 +122,32 @@ namespace Guardian.Domain
 
                 if (!string.IsNullOrEmpty(line))
                 {
-                    line = $"/bin/bash {args}{Environment.NewLine}" + line;
-                    throw new Exception(line);
+                    line = $"/bin/bash -c \"{args}\"{Environment.NewLine}" + line;
                 }
 
                 psi.WaitForExit();
+
+                var certCrtPath = Path.Combine(openSSLDir, $"{baseFileName}.crt");
+                var certKeyPath = Path.Combine(openSSLDir, $"{baseFileName}.key");
+
+                var result = new SSL()
+                {
+                    CertCrt = File.ReadAllText(certCrtPath),
+                    CertKey = File.ReadAllText(certKeyPath)
+                };
+
+                //Lets clear the path.
+                File.Delete(certCrtPath);
+                File.Delete(certKeyPath);
+                File.Delete(configFilePath);
+
+                return result;
+
             }
             catch (Exception ex)
             {
-                throw new Exception($"/bin/bash" + $" -c \"{args}\"" + $"{Environment.NewLine}", ex);
+                throw new Exception(line, ex);
             }
-
-            var certCrtPath = Path.Combine(openSSLDir, $"{baseFileName}.crt");
-            var certKeyPath = Path.Combine(openSSLDir, $"{baseFileName}.key");
-
-            var result = new SSL()
-            {
-                CertCrt = File.ReadAllText(certCrtPath),
-                CertKey = File.ReadAllText(certKeyPath)
-            };
-
-            //Lets clear the path.
-            File.Delete(certCrtPath);
-            File.Delete(certKeyPath);
-            File.Delete(configFilePath);
-
-            return result;
         }
 
         private static void InstallCertificate(string cerFileName)
