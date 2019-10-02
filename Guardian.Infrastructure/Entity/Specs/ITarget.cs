@@ -16,6 +16,8 @@ namespace Guardian.Infrastructure.Entity.Specs
 
         bool WAFEnabled { get; set; }
 
-        bool IsVerified { get; set; }
+        Protocol Proto { get; set; }
+
+        TargetState State { get; set; }
     }
 }

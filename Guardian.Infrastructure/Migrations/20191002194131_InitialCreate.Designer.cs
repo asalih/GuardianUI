@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20190928191028_InitialCreate")]
+    [Migration("20191002194131_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,10 +145,12 @@ namespace Guardian.Infrastructure.Migrations
                     b.Property<string>("Domain")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("IsVerified");
-
                     b.Property<string>("OriginIpAddress")
                         .HasMaxLength(250);
+
+                    b.Property<int>("Proto");
+
+                    b.Property<int>("State");
 
                     b.Property<bool>("UseHttps");
 
@@ -158,8 +160,7 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("Domain")
-                        .IsUnique();
+                    b.HasIndex("Domain", "State");
 
                     b.ToTable("Targets");
                 });

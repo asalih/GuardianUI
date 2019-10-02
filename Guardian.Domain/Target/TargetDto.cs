@@ -1,4 +1,5 @@
-﻿using Guardian.Infrastructure.Entity.Specs;
+﻿using Guardian.Infrastructure.Entity;
+using Guardian.Infrastructure.Entity.Specs;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -29,10 +30,13 @@ namespace Guardian.Domain.Target
         [Display(Name = "WAF Enabled")]
         public bool WAFEnabled { get; set; }
 
-        public bool IsVerified { get; set; }
-
         public int ActiveFirewallRulesCount { get; set; }
 
         public int PassiveFirewallRulesCount { get; set; }
+
+        [Display(Name = "Protocol between Guardian and the target")]
+        public Protocol Proto { get; set; }
+
+        public TargetState State { get; set; }
     }
 }

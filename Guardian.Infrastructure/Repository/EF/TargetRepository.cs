@@ -26,7 +26,7 @@ namespace Guardian.Infrastructure.Repository.EF
         }
 
         public async Task<Target> GetTargetWithTheDomain(string domain) =>
-            await DbSet.FirstOrDefaultAsync(s => s.Domain == domain);
+            await DbSet.FirstOrDefaultAsync(s => s.Domain == domain && s.State == TargetState.Redirected);
 
         public override async Task<Target> FirstOrDefault(Expression<Func<Target, bool>> predicate)
             => await DbSet.Where(s => s.AccountId == AccountId).FirstOrDefaultAsync(predicate);

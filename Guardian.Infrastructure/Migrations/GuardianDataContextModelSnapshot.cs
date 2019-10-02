@@ -143,10 +143,12 @@ namespace Guardian.Infrastructure.Migrations
                     b.Property<string>("Domain")
                         .HasMaxLength(250);
 
-                    b.Property<bool>("IsVerified");
-
                     b.Property<string>("OriginIpAddress")
                         .HasMaxLength(250);
+
+                    b.Property<int>("Proto");
+
+                    b.Property<int>("State");
 
                     b.Property<bool>("UseHttps");
 
@@ -156,8 +158,7 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("Domain")
-                        .IsUnique();
+                    b.HasIndex("Domain", "State");
 
                     b.ToTable("Targets");
                 });

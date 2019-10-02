@@ -10,7 +10,7 @@
         <div class="col-8">
             <h3>
                 <small>
-                    @if (Model.IsVerified)
+                    @if (Model.State == Guardian.Infrastructure.Entity.TargetState.Redirected)
                     {
                         <i class="fas fa-check-circle text-success"></i>
                     }

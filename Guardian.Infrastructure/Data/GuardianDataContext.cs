@@ -30,8 +30,7 @@ namespace Guardian.Infrastructure.Data
             {
                 b.HasKey(t => t.Id);
 
-                b.HasIndex(s => s.Domain)
-                    .IsUnique(true);
+                b.HasIndex(s => new { s.Domain, s.State });
 
                 b.HasOne(t => t.Account)
                     .WithMany(acc => acc.Targets)

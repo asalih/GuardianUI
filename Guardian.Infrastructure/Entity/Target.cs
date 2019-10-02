@@ -1,6 +1,5 @@
 ﻿using Guardian.Infrastructure.Entity.Specs;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,6 +27,8 @@ namespace Guardian.Infrastructure.Entity
 
         public bool WAFEnabled { get; set; }
 
-        public bool IsVerified { get; set; }
+        public Protocol Proto { get; set; }
+
+        public TargetState State { get; set; }
     }
 }

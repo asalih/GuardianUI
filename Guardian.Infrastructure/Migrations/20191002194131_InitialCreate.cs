@@ -37,7 +37,8 @@ namespace Guardian.Infrastructure.Migrations
                     AccountId = table.Column<Guid>(nullable: false),
                     UseHttps = table.Column<bool>(nullable: false),
                     WAFEnabled = table.Column<bool>(nullable: false),
-                    IsVerified = table.Column<bool>(nullable: false)
+                    Proto = table.Column<int>(nullable: false),
+                    State = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,7 +127,7 @@ namespace Guardian.Infrastructure.Migrations
                         column: x => x.FirewallRuleId,
                         principalTable: "FirewallRules",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_RuleLogs_Targets_TargetId",
                         column: x => x.TargetId,
@@ -166,10 +167,9 @@ namespace Guardian.Infrastructure.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Targets_Domain",
+                name: "IX_Targets_Domain_State",
                 table: "Targets",
-                column: "Domain",
-                unique: true);
+                columns: new[] { "Domain", "State" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

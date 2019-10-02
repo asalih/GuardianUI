@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Guardian.Infrastructure.Security.Specs;
 using System.Net;
 using System.Linq;
+using Guardian.Infrastructure.Entity;
+using RestSharp;
 
 namespace Guardian.Domain.Target
 {
@@ -46,10 +48,9 @@ namespace Guardian.Domain.Target
                 message.Target.UseHttps = true;
                 message.Target.WAFEnabled = true;
 
-                //TODO: Add verification process.
-                message.Target.IsVerified = true;
-
                 var target = _mapper.Map<Infrastructure.Entity.Target>(message.Target);
+                //TODO: Add verification process.
+                target.State = TargetState.Redirected;
 
                 var sslCert = SSLHelper.CreateSSL(target.Domain);
 
@@ -59,6 +60,7 @@ namespace Guardian.Domain.Target
                 var ipAddress = await Dns.GetHostEntryAsync(target.Domain);
 
                 target.OriginIpAddress = ipAddress.AddressList.FirstOrDefault()?.ToString() ?? null;
+                target.Proto = await ObtainProtocol(target.Domain);
 
                 await _repository.Add(target);
 
@@ -67,6 +69,32 @@ namespace Guardian.Domain.Target
                     IsSucceeded = true,
                     Result = _mapper.Map<TargetDto>(target)
                 };
+            }
+
+            private async Task<Protocol> ObtainProtocol(string domain)
+            {
+                var client = new RestClient("http://" + domain);
+                var request = new RestRequest("/", Method.GET);
+
+                request.AddHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36");
+                request.AddHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+                request.AddHeader("Accept-Encoding", "gzip, deflate, br");
+                request.AddHeader("Accept-Language", "en,tr;q=0.9,en-US;q=0.8,tr-TR;q=0.7");
+                request.AddHeader("Cache-Control", "max-age=0");
+
+                client.FollowRedirects = false;
+                var response = await client.ExecuteGetTaskAsync(request);
+
+                var code = (int)response.StatusCode;
+                if (response.ResponseStatus == ResponseStatus.Completed &&
+                    code >= 300 && code < 400)
+                {
+                    return response.Headers.Any(s => s.Name.ToLowerInvariant() == "location" && s.Value.ToString().StartsWith("https:")) ?
+                        Protocol.Https :
+                        Protocol.Http;
+                }
+
+                return Protocol.Http;
             }
         }
     }

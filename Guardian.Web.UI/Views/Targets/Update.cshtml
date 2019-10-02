@@ -39,6 +39,14 @@
                 <span asp-validation-for="WAFEnabled" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Proto" class="control-label"></label>
+                <select asp-for="Proto" class="form-control">
+                    <option value="@Guardian.Infrastructure.Entity.Protocol.Http">@Guardian.Infrastructure.Entity.Protocol.Http.ToString()</option>
+                    <option value="@Guardian.Infrastructure.Entity.Protocol.Https">@Guardian.Infrastructure.Entity.Protocol.Https.ToString()</option>
+                </select>
+                <span asp-validation-for="Proto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CertKey" class="control-label"></label>
                 <textarea asp-for="CertKey" class="form-control"></textarea>
                 <span asp-validation-for="CertKey" class="text-danger"></span>
