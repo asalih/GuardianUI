@@ -11,6 +11,7 @@ namespace Guardian.Infrastructure.Entity
         public Guid TargetId { get; set; }
         public virtual Target Target { get; set; }
         public virtual ICollection<RuleLog> RuleLogs { get; set; }
+        public RuleFor RuleFor { get; set; }
         public string Title { get; set; }
         public string Expression { get; set; }
         public bool IsActive { get; set; }

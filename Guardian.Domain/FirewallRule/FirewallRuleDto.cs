@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Guardian.Domain.Account;
 using Guardian.Domain.Target;
+using Guardian.Infrastructure.Entity;
 using Guardian.Infrastructure.Entity.Specs;
 
 namespace Guardian.Domain.FirewallRule
@@ -14,6 +15,9 @@ namespace Guardian.Domain.FirewallRule
         public TargetDto Target { get; set; }
         public string Title { get; set; }
         public string Expression { get; set; }
+
+        [Display(Name = "Rule For")]
+        public RuleFor RuleFor { get; set; }
 
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; }

@@ -17,5 +17,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         string Description { get; set; }
 
         string RequestUri { get; set; }
+
+        RuleFor RuleFor { get; set; }
     }
 }

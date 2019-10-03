@@ -4,6 +4,8 @@ namespace Guardian.Infrastructure.Entity.Specs
 {
     public interface IFirewallRule : IEntityBase
     {
+        RuleFor RuleFor { get; set; }
+
         Guid AccountId { get; set; }
 
         Guid TargetId { get; set; }

@@ -14,5 +14,6 @@ namespace Guardian.Infrastructure.Entity
         public Guid? FirewallRuleId { get; set; }
         public virtual FirewallRule FirewallRule { get; set; }
         public string RequestUri { get; set; }
+        public RuleFor RuleFor { get; set; }
     }
 }
