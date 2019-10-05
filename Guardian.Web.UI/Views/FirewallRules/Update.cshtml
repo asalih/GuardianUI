@@ -19,9 +19,25 @@
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="RuleFor" class="control-label"></label>
+                <select asp-for="RuleFor" class="form-control">
+                    <option value="@Guardian.Infrastructure.Entity.RuleFor.Request">@Guardian.Infrastructure.Entity.RuleFor.Request.ToString()</option>
+                    <option value="@Guardian.Infrastructure.Entity.RuleFor.Response">@Guardian.Infrastructure.Entity.RuleFor.Response.ToString()</option>
+                </select>
+                <span asp-validation-for="RuleFor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Expression" class="control-label"></label>
                 <textarea asp-for="Expression" class="form-control"></textarea>
                 <span asp-validation-for="Expression" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Action" class="control-label"></label>
+                <select asp-for="Action" class="form-control">
+                    <option value="@Guardian.Infrastructure.Entity.RuleAction.Allow">@Guardian.Infrastructure.Entity.RuleAction.Allow.ToString()</option>
+                    <option value="@Guardian.Infrastructure.Entity.RuleAction.Block">@Guardian.Infrastructure.Entity.RuleAction.Block.ToString()</option>
+                </select>
+                <span asp-validation-for="Action" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">

@@ -10,7 +10,9 @@ namespace Guardian.Infrastructure.Entity.Specs
 
         int StatusCode { get; set; }
 
-        long RuleCheckElapsed { get; set; }
+        long RequestRulesCheckElapsed { get; set; }
+
+        long ResponseRulesCheckElapsed { get; set; }
 
         long HttpElapsed { get; set; }
 

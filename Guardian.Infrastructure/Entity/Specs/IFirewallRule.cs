@@ -10,6 +10,8 @@ namespace Guardian.Infrastructure.Entity.Specs
 
         Guid TargetId { get; set; }
 
+        RuleAction Action { get; set; }
+
         string Title { get; set; }
 
         string Expression { get; set; }

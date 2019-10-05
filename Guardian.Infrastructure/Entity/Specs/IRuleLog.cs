@@ -19,5 +19,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         string RequestUri { get; set; }
 
         RuleFor RuleFor { get; set; }
+
+        WafAction WafAction { get; set; }
     }
 }

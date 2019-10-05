@@ -3,15 +3,17 @@ using System;
 using Guardian.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    partial class GuardianDataContextModelSnapshot : ModelSnapshot
+    [Migration("20191005105959_WafActionAdded")]
+    partial class WafActionAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,15 +84,13 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<long>("HttpElapsed");
 
-                    b.Property<long>("RequestRulesCheckElapsed");
-
                     b.Property<long>("RequestSize");
 
                     b.Property<string>("RequestUri");
 
-                    b.Property<long>("ResponseRulesCheckElapsed");
-
                     b.Property<long>("ResponseSize");
+
+                    b.Property<long>("RuleCheckElapsed");
 
                     b.Property<int>("StatusCode");
 

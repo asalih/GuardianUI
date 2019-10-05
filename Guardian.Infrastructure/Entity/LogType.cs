@@ -2,7 +2,7 @@
 {
     public enum LogType
     {
-        Firewall,
-        WAF
+        WAF,
+        Firewall
     }
 }

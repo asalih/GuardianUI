@@ -15,5 +15,6 @@ namespace Guardian.Infrastructure.Entity
         public virtual FirewallRule FirewallRule { get; set; }
         public string RequestUri { get; set; }
         public RuleFor RuleFor { get; set; }
+        public WafAction WafAction { get; set; }
     }
 }

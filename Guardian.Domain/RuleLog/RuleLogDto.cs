@@ -17,5 +17,6 @@ namespace Guardian.Domain.RuleLog
         public virtual TargetDto Target { get; set; }
         public string RequestUri { get; set; }
         public RuleFor RuleFor { get; set; }
+        public WafAction WafAction { get; set; }
     }
 }

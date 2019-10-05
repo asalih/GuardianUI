@@ -54,8 +54,6 @@ namespace Guardian.Domain.FirewallRule
 
                 await _repository.Add(firewallRule);
 
-
-
                 return new CommandResult<FirewallRuleDto>()
                 {
                     IsSucceeded = true,
