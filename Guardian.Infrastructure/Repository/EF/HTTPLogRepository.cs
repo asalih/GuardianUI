@@ -106,7 +106,7 @@ namespace Guardian.Infrastructure.Repository.EF
 
         public async Task<DBReportResult> RequestRuleRatioQuery(DateTime queryTime, Target target)
         {
-            var commandText = "SELECT SUM(\"HttpElapsed\" + \"RuleCheckElapsed\") / SUM(\"RuleCheckElapsed\") \"Ratio\" " +
+            var commandText = "SELECT SUM(\"HttpElapsed\" + \"RequestRulesCheckElapsed\" + \"ResponseRulesCheckElapsed\") / SUM(\"RequestRulesCheckElapsed\" + \"ResponseRulesCheckElapsed\") \"Ratio\" " +
 "FROM \"HTTPLogs\" AS s0 " +
 "INNER JOIN \"Targets\" AS \"s.Target0\" ON s0.\"TargetId\" = \"s.Target0\".\"Id\" " +
 "WHERE (\"s.Target0\".\"AccountId\" = @AccountId) " +
