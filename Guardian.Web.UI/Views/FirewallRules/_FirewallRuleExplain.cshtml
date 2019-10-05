@@ -24,9 +24,19 @@
         </li>
         <li>http.path: request's path.</li>
         <li>http.host: host header.</li>
-        <li>http.cookie: Key value raw cookie. e.g cookie1=value1; cookie2=value2;</li>
-        <li>http.header: Key value raw headers.</li>
+        <li>http.cookie: key value raw cookie. e.g cookie1=value1; cookie2=value2;</li>
+        <li>http.header: key value raw headers.</li>
         <li>http.method: request's http method.</li>
         <li>http.protocol: request's protocol.</li>
+    </ul>
+    <p>
+        Also, if you writing rule for responses then you have response object;
+    </p>
+    <ul>
+        <li>response.status: status text of response</li>
+        <li>response.statusCode: status code of response</li>
+        <li>response.cookie: key value raw cookie. e.g cookie1=value1; cookie2=value2;</li>
+        <li>response.header: key value raw headers.</li>
+        <li>response.contentLength: content length of the response.</li>
     </ul>
 </div>
