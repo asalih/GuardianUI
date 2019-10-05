@@ -125,10 +125,11 @@ namespace Guardian.Infrastructure.Repository.EF
                 {
                     if (await result.ReadAsync())
                     {
+                        var data = result["Ratio"].ToString();
                         return new DBReportResult()
                         {
                             Time = queryTime,
-                            Value = result.GetDouble(0).ToString("0.##")
+                            Value = string.IsNullOrEmpty(data) ? "0" : Convert.ToDouble(data).ToString("0.##")
                         };
                     }
                 }
