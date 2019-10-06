@@ -59,6 +59,8 @@ namespace Guardian.Infrastructure.Migrations
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false),
                     AccountId = table.Column<Guid>(nullable: false),
                     TargetId = table.Column<Guid>(nullable: false),
+                    RuleFor = table.Column<int>(nullable: false),
+                    Action = table.Column<int>(nullable: false),
                     Title = table.Column<string>(nullable: true),
                     Expression = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false)
@@ -89,7 +91,8 @@ namespace Guardian.Infrastructure.Migrations
                     TargetId = table.Column<Guid>(nullable: false),
                     RequestUri = table.Column<string>(nullable: true),
                     StatusCode = table.Column<int>(nullable: false),
-                    RuleCheckElapsed = table.Column<long>(nullable: false),
+                    RequestRulesCheckElapsed = table.Column<long>(nullable: false),
+                    ResponseRulesCheckElapsed = table.Column<long>(nullable: false),
                     HttpElapsed = table.Column<long>(nullable: false),
                     RequestSize = table.Column<long>(nullable: false),
                     ResponseSize = table.Column<long>(nullable: false)
@@ -117,7 +120,9 @@ namespace Guardian.Infrastructure.Migrations
                     LogType = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     FirewallRuleId = table.Column<Guid>(nullable: true),
-                    RequestUri = table.Column<string>(nullable: true)
+                    RequestUri = table.Column<string>(nullable: true),
+                    RuleFor = table.Column<int>(nullable: false),
+                    WafAction = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,7 +132,7 @@ namespace Guardian.Infrastructure.Migrations
                         column: x => x.FirewallRuleId,
                         principalTable: "FirewallRules",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RuleLogs_Targets_TargetId",
                         column: x => x.TargetId,

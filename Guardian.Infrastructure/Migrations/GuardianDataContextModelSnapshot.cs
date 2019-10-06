@@ -198,7 +198,8 @@ namespace Guardian.Infrastructure.Migrations
                 {
                     b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "FirewallRule")
                         .WithMany("RuleLogs")
-                        .HasForeignKey("FirewallRuleId");
+                        .HasForeignKey("FirewallRuleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
                         .WithMany()

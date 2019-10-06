@@ -46,6 +46,26 @@ namespace Guardian.Infrastructure.Data
                     .HasForeignKey(t => t.AccountId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<Target>(b =>
+            {
+                b.HasKey(t => t.Id);
+
+                b.HasMany(r => r.FirewallRules)
+                .WithOne(t => t.Target)
+                .HasForeignKey(t => t.TargetId)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<FirewallRule>(b =>
+            {
+                b.HasKey(t => t.Id);
+
+                b.HasMany(r => r.RuleLogs)
+                .WithOne(t => t.FirewallRule)
+                .HasForeignKey(t => t.FirewallRuleId)
+                .OnDelete(DeleteBehavior.Cascade);
+            });
         }
 
         public void BeginTransaction()

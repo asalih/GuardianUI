@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Guardian.Infrastructure.Migrations
 {
     [DbContext(typeof(GuardianDataContext))]
-    [Migration("20191004170243_RuleActionAdded")]
-    partial class RuleActionAdded
+    [Migration("20191006172849_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -84,13 +84,15 @@ namespace Guardian.Infrastructure.Migrations
 
                     b.Property<long>("HttpElapsed");
 
+                    b.Property<long>("RequestRulesCheckElapsed");
+
                     b.Property<long>("RequestSize");
 
                     b.Property<string>("RequestUri");
 
-                    b.Property<long>("ResponseSize");
+                    b.Property<long>("ResponseRulesCheckElapsed");
 
-                    b.Property<long>("RuleCheckElapsed");
+                    b.Property<long>("ResponseSize");
 
                     b.Property<int>("StatusCode");
 
@@ -125,6 +127,8 @@ namespace Guardian.Infrastructure.Migrations
                     b.Property<int>("RuleFor");
 
                     b.Property<Guid>("TargetId");
+
+                    b.Property<int>("WafAction");
 
                     b.HasKey("Id");
 
@@ -196,7 +200,8 @@ namespace Guardian.Infrastructure.Migrations
                 {
                     b.HasOne("Guardian.Infrastructure.Entity.FirewallRule", "FirewallRule")
                         .WithMany("RuleLogs")
-                        .HasForeignKey("FirewallRuleId");
+                        .HasForeignKey("FirewallRuleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Guardian.Infrastructure.Entity.Target", "Target")
                         .WithMany()
