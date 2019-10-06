@@ -16,6 +16,12 @@
                 <input asp-for="Domain" class="form-control" />
                 <span asp-validation-for="Domain" class="text-danger"></span>
             </div>
+            <div class="form-group form-check">
+                <input asp-for="AutoCert" class="form-check-input" />
+                <label asp-for="AutoCert" class="form-check-label"></label>
+                <label class="text-info font-italic"> * Auto certification handled with Let's Encrypt.</label>
+                <span asp-validation-for="AutoCert" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

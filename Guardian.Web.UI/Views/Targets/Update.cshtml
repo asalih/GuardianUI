@@ -28,12 +28,19 @@
                 <input asp-for="OriginIpAddress" class="form-control" />
                 <span asp-validation-for="OriginIpAddress" class="text-danger"></span>
             </div>
-            <div class="form-check">
+            <div class="form-group form-check">
                 <input asp-for="UseHttps" class="form-check-input" />
                 <label asp-for="UseHttps" class="form-check-label"></label>
                 <span asp-validation-for="UseHttps" class="text-danger"></span>
             </div>
-            <div class="form-check">
+            <div class="form-group form-check">
+                <input asp-for="AutoCert" class="form-check-input" />
+                <label asp-for="AutoCert" class="form-check-label"></label>
+                <label class="text-info font-italic"> * Auto certification handled with Let's Encrypt.</label>
+                <span asp-validation-for="AutoCert" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-check">
                 <input asp-for="WAFEnabled" class="form-check-input" />
                 <label asp-for="WAFEnabled" class="form-check-label"></label>
                 <span asp-validation-for="WAFEnabled" class="text-danger"></span>

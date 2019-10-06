@@ -30,5 +30,7 @@ namespace Guardian.Infrastructure.Entity
         public Protocol Proto { get; set; }
 
         public TargetState State { get; set; }
+
+        public bool AutoCert { get; set; }
     }
 }

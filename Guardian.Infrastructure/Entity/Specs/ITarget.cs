@@ -14,6 +14,8 @@ namespace Guardian.Infrastructure.Entity.Specs
 
         bool UseHttps { get; set; }
 
+        bool AutoCert { get; set; }
+
         bool WAFEnabled { get; set; }
 
         Protocol Proto { get; set; }

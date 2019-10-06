@@ -38,5 +38,8 @@ namespace Guardian.Domain.Target
         public Protocol Proto { get; set; }
 
         public TargetState State { get; set; }
+
+        [Display(Name = "Enable Auto Certification")]
+        public bool AutoCert { get; set; }
     }
 }
