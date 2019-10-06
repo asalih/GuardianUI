@@ -52,10 +52,13 @@ namespace Guardian.Domain.Target
                 //TODO: Add verification process.
                 target.State = TargetState.Redirected;
 
-                var sslCert = SSLHelper.CreateSSL(target.Domain);
+                if (message.Target.CreateSelfSignedCertificate)
+                {
+                    var sslCert = SSLHelper.CreateSSL(target.Domain);
 
-                target.CertCrt = sslCert.CertCrt;
-                target.CertKey = sslCert.CertKey;
+                    target.CertCrt = sslCert.CertCrt;
+                    target.CertKey = sslCert.CertKey;
+                }
 
                 var ipAddress = await Dns.GetHostEntryAsync(target.Domain);
 

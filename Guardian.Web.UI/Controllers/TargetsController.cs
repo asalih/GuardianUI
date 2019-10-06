@@ -84,33 +84,6 @@ namespace Guardian.Web.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReCreateCertificate(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                return NotFound();
-            }
-
-            var result = await _mediator.Send(new Update.Command()
-            {
-                TargetId = id,
-                IsReCreateCertificateCommand = true
-            });
-
-            if (result.IsSucceeded)
-            {
-                Alert(AlertTypes.Success, "Successfully re-created certificate.");
-            }
-            else
-            {
-                Alert(AlertTypes.Error, "Re-creating certificate has faild.");
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TargetDto model)
         {
             if (!ModelState.IsValid)
@@ -157,7 +130,21 @@ namespace Guardian.Web.UI.Controllers
                 return View(model);
             }
 
-            Alert(AlertTypes.Success, "Target successfully updated!");
+            if (model.CreateSelfSignedCertificate)
+            {
+                if (result.IsSucceeded)
+                {
+                    Alert(AlertTypes.Success, "Successfully re-created certificate.");
+                }
+                else
+                {
+                    Alert(AlertTypes.Error, "Re-creating certificate has faild.");
+                }
+            }
+            else
+            {
+                Alert(AlertTypes.Success, "Target successfully updated!");
+            }
 
             return RedirectToAction(nameof(Details), new { id = result.Result.Id });
         }

@@ -13,10 +13,6 @@ namespace Guardian.Domain.Target
         public class Command : IRequest<CommandResult<TargetDto>>
         {
             public TargetDto Target { get; set; }
-
-            public Guid TargetId { get; set; }
-
-            public bool IsReCreateCertificateCommand { get; set; }
         }
 
         public class QueryHandler : IRequestHandler<Command, CommandResult<TargetDto>>
@@ -32,9 +28,9 @@ namespace Guardian.Domain.Target
 
             public async Task<CommandResult<TargetDto>> Handle(Command message, CancellationToken cancellationToken)
             {
-                if (message.IsReCreateCertificateCommand)
+                if (message.Target.CreateSelfSignedCertificate)
                 {
-                    return await ReCreateCertificate(message.TargetId);
+                    return await ReCreateCertificate(message.Target.Id);
                 }
 
                 var theTargetWithDomain = await _repository.GetTargetWithTheDomain(message.Target.Domain);

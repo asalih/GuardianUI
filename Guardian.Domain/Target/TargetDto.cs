@@ -41,5 +41,8 @@ namespace Guardian.Domain.Target
 
         [Display(Name = "Enable Auto Certification")]
         public bool AutoCert { get; set; }
+
+        [Display(Name = "Create Self Signed Certificate")]
+        public bool CreateSelfSignedCertificate { get; set; }
     }
 }

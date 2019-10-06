@@ -7,15 +7,8 @@
 
 <h1>Update Target</h1>
 <hr />
-<div>
-    <form asp-action="ReCreateCertificate">
-        <input type="hidden" asp-for="Id" />
-        <button class="btn btn-primary" type="submit">Re-create Certificate</button>
-    </form>
-</div>
-<br />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -38,6 +31,7 @@
                 <label asp-for="AutoCert" class="form-check-label"></label>
                 <label class="text-info font-italic"> * Auto certification handled with Let's Encrypt.</label>
                 <span asp-validation-for="AutoCert" class="text-danger"></span>
+                <div class="alert alert-info" id="autoCert">You can also use your certificate by disabling auto certification.</div>
             </div>
 
             <div class="form-group form-check">
@@ -53,16 +47,41 @@
                 </select>
                 <span asp-validation-for="Proto" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CertKey" class="control-label"></label>
-                <textarea asp-for="CertKey" class="form-control"></textarea>
-                <span asp-validation-for="CertKey" class="text-danger"></span>
+            <input type="hidden" asp-for="CreateSelfSignedCertificate" />
+            <div class="form-group" id="customCertificate">
+                <div class="accordion" id="accordionCS">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Custom Certificate
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionCS">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="CertKey" class="control-label"></label>
+                                    <textarea asp-for="CertKey" class="form-control" rows="29"></textarea>
+                                    <span asp-validation-for="CertKey" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="CertCrt" class="control-label"></label>
+                                    <textarea asp-for="CertCrt" class="form-control" rows="19"></textarea>
+                                    <span asp-validation-for="CertCrt" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-secondary btn-sm float-right" type="submit" id="createSelfSignedCertBtn">Create Self-Signed Certificate</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-warning mt-2">
+                    Add or update private key and your certificate using "Custom Certificate" accordion above. Also you can create self-signed certificate.
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CertCrt" class="control-label"></label>
-                <textarea asp-for="CertCrt" class="form-control"></textarea>
-                <span asp-validation-for="CertCrt" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <input type="submit" value="Update" class="btn btn-primary" />
             </div>
@@ -74,3 +93,26 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#createSelfSignedCertBtn").on("click", function () {
+                $("#CreateSelfSignedCertificate").val("true");
+            });
+
+            toggleHandlerForAutoCert();
+            $("#AutoCert").change(toggleHandlerForAutoCert);
+
+            function toggleHandlerForAutoCert() {
+                if ($("#AutoCert").is(":checked")) {
+                    $("#customCertificate").hide();
+                    $("#autoCert").show();
+                }
+                else {
+                    $("#customCertificate").show();
+                    $("#autoCert").hide();
+                }
+            }
+        });
+    </script>
+}
