@@ -45,7 +45,7 @@ namespace Guardian.Domain.Target
                     };
                 }
 
-                message.Target.UseHttps = true;
+                message.Target.UseHttps = message.Target.AutoCert || message.Target.CreateSelfSignedCertificate;
                 message.Target.WAFEnabled = true;
 
                 var target = _mapper.Map<Infrastructure.Entity.Target>(message.Target);

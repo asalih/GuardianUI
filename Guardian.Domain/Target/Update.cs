@@ -52,6 +52,7 @@ namespace Guardian.Domain.Target
                 target.CertCrt = message.Target.CertCrt;
                 target.CertKey = message.Target.CertKey;
                 target.WAFEnabled = message.Target.WAFEnabled;
+                target.AutoCert = message.Target.AutoCert;
 
                 if (target.Domain != message.Target.Domain)
                 {
