@@ -61,7 +61,7 @@
             <h4 class="my-0 font-weight-normal">Custom Firewall RULES</h4>
         </div>
         <div class="card-body text-center">
-            <h1 class="card-title pricing-card-title"><a asp-action="Index" asp-controller="FirewallRules">@Model.ActiveFirewallRulesCount <small class="text-muted">/ @Model.PassiveFirewallRulesCount</small></a></h1>
+            <h1 class="card-title pricing-card-title"><a asp-action="Index" asp-controller="FirewallRules" asp-route-id="@Model.Id">@Model.ActiveFirewallRulesCount <small class="text-muted">/ @Model.PassiveFirewallRulesCount</small></a></h1>
 
             @if (Model.ActiveFirewallRulesCount == 0)
             {
