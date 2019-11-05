@@ -61,7 +61,7 @@ namespace Guardian.Web.UI
                 {
                     OnRedirectToAccessDenied = ctx =>
                     {
-                        if(ctx.HttpContext.User?.Identity?.IsAuthenticated ?? false)
+                        if (ctx.HttpContext.User?.Identity?.IsAuthenticated ?? false)
                         {
                             ctx.Response.Redirect("/Account/Login");
                         }
@@ -79,18 +79,18 @@ namespace Guardian.Web.UI
             services.AddAutoMapper(typeof(Representor).Assembly);
 
             services
-                .AddMvc()
+                .AddMvc(opts => opts.EnableEndpointRouting = false)
                 .AddFluentValidation(cfg =>
                 {
                     cfg.RegisterValidatorsFromAssemblyContaining<Representor>();
                 })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.EnvironmentName == "development")
             {
                 app.UseDeveloperExceptionPage();
             }

@@ -8,9 +8,9 @@ namespace Guardian.Web.UI.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly IHostingEnvironment env;
+        private readonly IWebHostEnvironment env;
 
-        public HomeController(IHostingEnvironment env)
+        public HomeController(IWebHostEnvironment env)
         {
             this.env = env;
         }

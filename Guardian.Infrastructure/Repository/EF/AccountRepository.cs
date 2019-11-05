@@ -18,7 +18,7 @@ namespace Guardian.Infrastructure.Repository.EF
 
         }
 
-        public async Task<Account> FirstOrDefault(Expression<Func<Account, bool>> predicate)
+        public override async Task<Account> FirstOrDefault(Expression<Func<Account, bool>> predicate)
             => await DbSet.FirstOrDefaultAsync(predicate);
 
         public async Task<Account> GetByEmailAddress(string email) => await FirstOrDefault(s => s.Email == email);
