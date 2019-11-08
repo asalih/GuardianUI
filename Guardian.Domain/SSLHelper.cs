@@ -11,19 +11,6 @@ namespace Guardian.Domain
         private const string winCmd = "req -newkey rsa:2048 -x509 -nodes -keyout {2}\\{1}.key -new -out {2}\\{1}.crt -subj \"/CN={0}\" -reqexts SAN -extensions SAN -config \"{3}\" -sha256 -days 3650";
 
         private const string linuxCmd = "openssl req -newkey rsa:2048 -x509 -nodes -keyout {2}/{1}.key -new -out {2}/{1}.crt -subj /CN={0} -reqexts SAN -extensions SAN -config {3} -sha256 -days 3650";
-        //        private const string linuxCmd = "req \\ " +
-        //"- newkey rsa:2048 \\" +
-        //"-x509 \\" +
-        //"-nodes \\" +
-        //"-keyout {2}\\{1}.key \\" +
-        //"-new \\" +
-        //"-out {2}\\{1}.crt \\" +
-        //"-subj /CN={0} \\" +
-        //"-reqexts SAN \\" +
-        //"-extensions SAN \\" +
-        //"-config {3} \\" +
-        //"-sha256 \\" +
-        //"-days 3650";
 
         public static SSL CreateSSL(string domain)
         {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Guardian.Domain;
 using Guardian.Domain.Target;
 using Guardian.Web.UI.Models;
 using MediatR;
