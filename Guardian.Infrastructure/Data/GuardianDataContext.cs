@@ -24,6 +24,8 @@ namespace Guardian.Infrastructure.Data
 
         public DbSet<HTTPLog> HTTPLogs { get; set; }
 
+        public DbSet<ThrottleLog> ThrottleLogs { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Target>(b =>
