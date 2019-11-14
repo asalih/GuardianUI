@@ -17,7 +17,7 @@ Task("Build")
 Task("Test")
   .Does(() =>
 {
-    var files = GetFiles("tests/**/*.csproj");
+    var files = GetFiles("Guardian.Tests/Guardian.Tests.csproj");
     foreach(var file in files)
     {
         DotNetCoreTest(file.ToString());
@@ -66,6 +66,5 @@ Task("Default")
  Task("Rebuild")
     .IsDependentOn("Restore")
     .IsDependentOn("Build");
-
 
 RunTarget(target);
