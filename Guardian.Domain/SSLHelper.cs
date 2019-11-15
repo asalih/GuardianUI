@@ -56,7 +56,7 @@ namespace Guardian.Domain
                 CertKey = File.ReadAllText(certKeyPath)
             };
 
-            InstallCertificate(certCrtPath);
+            //InstallCertificate(certCrtPath);
 
             //Lets clear the path.
             File.Delete(certCrtPath);

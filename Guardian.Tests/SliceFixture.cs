@@ -1,8 +1,12 @@
 using System;
 using System.IO;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
+using Guardian.Domain.Account;
 using Guardian.Infrastructure.Data;
+using Guardian.Infrastructure.Entity;
+using Guardian.Infrastructure.Security;
 using Guardian.Web.UI;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
@@ -19,6 +23,9 @@ namespace Guardian.Tests
     public class SliceFixture
     {
         static readonly IConfiguration Config;
+
+        static Account TestAccount;
+        private static object Locker = new object();
 
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ServiceProvider _provider;
@@ -45,8 +52,6 @@ namespace Guardian.Tests
 
             startup.ConfigureServices(services);
 
-
-
             var authServiceMock = new Mock<IAuthenticationService>();
             authServiceMock
                 .Setup(_ => _.SignInAsync(It.IsAny<HttpContext>(), It.IsAny<string>(), It.IsAny<ClaimsPrincipal>(), It.IsAny<AuthenticationProperties>()))
@@ -63,6 +68,7 @@ namespace Guardian.Tests
                 // How mock RequestServices?
                 RequestServices = serviceProviderMock.Object
             };
+
             mockHttpContextAccessor.Setup(_ => _.HttpContext).Returns(context);
 
             services.AddSingleton(mockHttpContextAccessor.Object);
@@ -72,6 +78,9 @@ namespace Guardian.Tests
 
             GetDbContext().Database.EnsureCreated();
             _scopeFactory = _provider.GetService<IServiceScopeFactory>();
+
+            var identityHelper = new IdentityHelper(mockHttpContextAccessor.Object);
+            context.User = identityHelper.CreateIdentity(GetGlobalTestAccount());
         }
 
         public GuardianDataContext GetDbContext()
@@ -140,6 +149,55 @@ namespace Guardian.Tests
                 }
                 return db.SaveChangesAsync();
             });
+        }
+
+        private Account GetGlobalTestAccount()
+        {
+            lock (Locker)
+            {
+                if(TestAccount == null)
+                {
+                    var email = "testglobal@guardian-waf.com";
+                    var pwd = "1q2w3e4r";
+                    var command = new SignUp.Command()
+                    {
+                        Account = new SignUp.AccountSignUpDto
+                        {
+                            Email = email,
+                            FullName = "Test User",
+                            Password = pwd,
+                            PasswordAgain = pwd
+                        }
+                    };
+
+                    var result = SendAsync(command).GetAwaiter().GetResult();
+
+                    var loginCmd = new Login.Command()
+                    {
+                        Account = new Login.AccountLoginDto()
+                        {
+                            Email = email,
+                            Password = pwd
+                        }
+                    };
+
+                    var accountDto = SendAsync(loginCmd)
+                        .GetAwaiter()
+                        .GetResult()
+                        .Result;
+
+                    TestAccount = new Account()
+                    {
+                        CreatedAt = DateTime.Now,
+                        Email = accountDto.Email,
+                        FullName = accountDto.FullName,
+                        Id = accountDto.Id,
+                        Role = "user"
+                    };
+                }
+
+                return TestAccount;
+            }
         }
     }
 }
