@@ -4,6 +4,7 @@ using Guardian.Infrastructure.Security.Specs;
 using Guardian.Web.UI.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static Guardian.Domain.Account.Login;
@@ -88,5 +89,55 @@ namespace Guardian.Web.UI.Controllers
             return RedirectToAction(nameof(Login));
         }
 
+        [Authorize]
+        public async Task<ActionResult> Information()
+        {
+            var accountId = _identityHelper.GetAccountId();
+
+            if (!accountId.HasValue)
+            {
+                return NotFound();
+            }
+
+            var query = await _mediator.Send(new Details.Query(accountId.Value));
+
+            if (query?.Result == null ||
+                query?.IsSucceeded != true)
+            {
+                return NotFound();
+            }
+
+            return View(query.Result);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<ActionResult> Information(AccountDto model)
+        {
+            var accountId = _identityHelper.GetAccountId();
+
+            if (!accountId.HasValue)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            model.Id = accountId.Value;
+            var result = await _mediator.Send(new Update.Command()
+            {
+                Account = model
+            });
+
+            if (!result.IsSucceeded)
+            {
+                return View(model);
+            }
+
+            return RedirectToAction(nameof(Information));
+        }
     }
 }

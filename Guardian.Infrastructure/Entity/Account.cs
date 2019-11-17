@@ -19,5 +19,8 @@ namespace Guardian.Infrastructure.Entity
         public string FullName { get; set; }
 
         public ICollection<Target> Targets { get; set; }
+
+        [StringLength(75)]
+        public string Token { get; set; }
     }
 }

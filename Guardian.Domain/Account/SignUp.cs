@@ -6,7 +6,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -76,10 +75,9 @@ namespace Guardian.Domain.Account
                 var account = _mapper.Map<Infrastructure.Entity.Account>(message.Account);
                 account.Role = "User";
 
-                var salt = CryptoHelper.GenerateSalt();
-
-                account.Password = Convert.ToBase64String(CryptoHelper.ComputeHash(account.Password, salt));
-                account.Salt = Convert.ToBase64String(salt);
+                account.Password = PasswordHelper.GeneratePassword(account.Password, out var salt);
+                account.Salt = salt;
+                account.Token = TokenHelper.GenerateToken();
 
                 await _repository.Add(account);
 

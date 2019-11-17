@@ -2,6 +2,8 @@
 using Guardian.Infrastructure.Entity.Specs;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Guardian.Domain.Target
 {
@@ -42,6 +44,9 @@ namespace Guardian.Domain.Target
         [Display(Name = "Enable Auto Certification")]
         public bool AutoCert { get; set; }
 
+        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
+        [IgnoreDataMember]
         [Display(Name = "Create Self Signed Certificate")]
         public bool CreateSelfSignedCertificate { get; set; }
     }

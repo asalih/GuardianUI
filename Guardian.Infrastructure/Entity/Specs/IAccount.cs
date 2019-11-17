@@ -11,5 +11,7 @@ namespace Guardian.Infrastructure.Entity.Specs
         string Salt { get; set; }
 
         string FullName { get; set; }
+
+        string Token { get; set; }
     }
 }
