@@ -20,17 +20,13 @@ namespace Guardian.Domain.FirewallRule
             private readonly IFirewallRuleRepository _repository;
             private readonly ITargetRepository _targetRepository;
             private readonly IMapper _mapper;
-            private readonly IIdentityHelper _identityHelper;
 
             public QueryHandler(IFirewallRuleRepository repository,
                 IMapper mapper,
-                IIdentityHelper identityHelper,
-                ITargetRepository targetRepository,
-                IRuleLogRepository logRepo)
+                ITargetRepository targetRepository)
             {
                 _repository = repository;
                 _mapper = mapper;
-                _identityHelper = identityHelper;
                 _targetRepository = targetRepository;
             }
 

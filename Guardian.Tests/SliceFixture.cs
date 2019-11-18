@@ -25,7 +25,7 @@ namespace Guardian.Tests
         static readonly IConfiguration Config;
 
         static Account TestAccount;
-        private static object Locker = new object();
+        private static readonly object Locker = new object();
 
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ServiceProvider _provider;

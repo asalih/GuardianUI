@@ -36,16 +36,18 @@ namespace Guardian.Domain
 
             var args = string.Format(winCmd, domain, baseFileName, openSSLDir, configFilePath);
 
-            var psi = new Process
+            using (var psi = new Process
             {
                 StartInfo = new ProcessStartInfo(execPath, args)
                 {
                     UseShellExecute = true,
                 }
-            };
-            psi.Start();
+            })
+            {
+                psi.Start();
 
-            psi.WaitForExit();
+                psi.WaitForExit();
+            }
 
             var certCrtPath = Path.Combine(openSSLDir, $"{baseFileName}.crt");
             var certKeyPath = Path.Combine(openSSLDir, $"{baseFileName}.key");
@@ -84,7 +86,7 @@ namespace Guardian.Domain
             var line = "";
             try
             {
-                var psi = new Process
+                using (var psi = new Process
                 {
                     StartInfo = new ProcessStartInfo($"/bin/bash", $"-c \"{args}\"")
                     {
@@ -93,25 +95,27 @@ namespace Guardian.Domain
                         RedirectStandardError = true,
                         CreateNoWindow = true
                     }
-                };
-                psi.Start();
-
-                while (!psi.StandardOutput.EndOfStream)
+                })
                 {
-                    line += psi.StandardOutput.ReadLine();
-                }
+                    psi.Start();
 
-                while (!psi.StandardError.EndOfStream)
-                {
-                    line += psi.StandardError.ReadLine();
-                }
+                    while (!psi.StandardOutput.EndOfStream)
+                    {
+                        line += psi.StandardOutput.ReadLine();
+                    }
 
-                if (!string.IsNullOrEmpty(line))
-                {
-                    line = $"/bin/bash -c \"{args}\"{Environment.NewLine}" + line;
-                }
+                    while (!psi.StandardError.EndOfStream)
+                    {
+                        line += psi.StandardError.ReadLine();
+                    }
 
-                psi.WaitForExit();
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        line = $"/bin/bash -c \"{args}\"{Environment.NewLine}" + line;
+                    }
+
+                    psi.WaitForExit();
+                }
 
                 var certCrtPath = Path.Combine(openSSLDir, $"{baseFileName}.crt");
                 var certKeyPath = Path.Combine(openSSLDir, $"{baseFileName}.key");

@@ -8,13 +8,6 @@ namespace Guardian.Web.UI.Controllers
 {
     public class HomeController : BaseController
     {
-        private readonly IWebHostEnvironment env;
-
-        public HomeController(IWebHostEnvironment env)
-        {
-            this.env = env;
-        }
-
         public IActionResult Index()
         {
             return View();

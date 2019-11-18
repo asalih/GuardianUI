@@ -64,7 +64,7 @@ namespace Guardian.Domain.Account
 
                 if (message.Account.ReGenerateToken)
                 {
-                    return await UpdateToken(account, cancellationToken);
+                    return await UpdateToken(account);
                 }
 
                 if (account.Email != message.Account.Email)
@@ -104,7 +104,7 @@ namespace Guardian.Domain.Account
                 };
             }
 
-            private async Task<CommandResult<AccountDto>> UpdateToken(Infrastructure.Entity.Account account, CancellationToken cancellationToken)
+            private async Task<CommandResult<AccountDto>> UpdateToken(Infrastructure.Entity.Account account)
             {
                 account.Token = TokenHelper.GenerateToken();
 

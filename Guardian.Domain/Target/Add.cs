@@ -23,13 +23,11 @@ namespace Guardian.Domain.Target
         {
             private readonly ITargetRepository _repository;
             private readonly IMapper _mapper;
-            private readonly IIdentityHelper _identityHelper;
 
-            public QueryHandler(ITargetRepository repository, IMapper mapper, IIdentityHelper identityHelper)
+            public QueryHandler(ITargetRepository repository, IMapper mapper)
             {
                 _repository = repository;
                 _mapper = mapper;
-                _identityHelper = identityHelper;
             }
 
             public async Task<CommandResult<TargetDto>> Handle(Command message, CancellationToken cancellationToken)
