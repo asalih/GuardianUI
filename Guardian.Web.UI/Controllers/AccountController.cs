@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Text;
+using System.Threading.Tasks;
 using Guardian.Domain.Account;
 using Guardian.Infrastructure.Security.Specs;
 using Guardian.Web.UI.Models;
@@ -107,6 +109,7 @@ namespace Guardian.Web.UI.Controllers
                 return NotFound();
             }
 
+            query.Result.Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{query.Result.Id}:{query.Result.Token}"));
             return View(query.Result);
         }
 

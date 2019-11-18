@@ -23,6 +23,8 @@ namespace Guardian.Infrastructure.Repository.EF
 
         public async Task<Account> GetByEmailAddress(string email) => await FirstOrDefault(s => s.Email == email);
 
+        public async Task<Account> GetByToken(Guid id, string token) => await FirstOrDefault(s => s.Id == id && s.Token == token);
+
         public async Task<Account> GetById(Guid id) => await DbSet.FirstOrDefaultAsync(s => s.Id == id);
 
         public IQueryable<Account> Query() => DbSet.AsQueryable<Account>();

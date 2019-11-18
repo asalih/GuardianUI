@@ -12,34 +12,20 @@ using Guardian.Infrastructure.Security.Specs;
 
 namespace Guardian.Domain.Account
 {
-    public class Login
+    public class TokenLogin
     {
-        public class AccountLoginDto
-        {
-            public string Email { get; set; }
-
-            public string Password { get; set; }
-        }
-
-        public class AccountLoginDtoValidator : AbstractValidator<AccountLoginDto>
-        {
-            public AccountLoginDtoValidator()
-            {
-                RuleFor(x => x.Email).NotNull().NotEmpty().EmailAddress();
-                RuleFor(x => x.Password).NotNull().NotEmpty().MinimumLength(8);
-            }
-        }
-
         public class Command : IRequest<CommandResult<AccountDto>>
         {
-            public AccountLoginDto Account { get; set; }
+            public Guid Id { get; set; }
+            public string Token { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Account).NotNull().SetValidator(new AccountLoginDtoValidator());
+                RuleFor(x => x.Token).NotNull().NotEmpty();
+                RuleFor(x => x.Id).NotNull().NotEmpty();
             }
         }
 
@@ -63,14 +49,9 @@ namespace Guardian.Domain.Account
 
             public async Task<CommandResult<AccountDto>> Handle(Command message, CancellationToken cancellationToken)
             {
-                var account = await _accountRepository.GetByEmailAddress(message.Account.Email);
+                var account = await _accountRepository.GetByToken(message.Id, message.Token);
 
                 if (account == null)
-                {
-                    return new CommandResult<AccountDto>(false);
-                }
-
-                if (!CryptoHelper.CompareHash(message.Account.Password, account.Password, Convert.FromBase64String(account.Salt)))
                 {
                     return new CommandResult<AccountDto>(false);
                 }

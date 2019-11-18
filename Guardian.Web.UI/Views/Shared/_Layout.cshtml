@@ -50,7 +50,7 @@
 
             @if (TempData["Message"] != null)
             {
-                <div class="alert alert-@TempData["AlertType"] role="alert">
+                <div class="alert alert-@TempData["AlertType"]" role="alert">
                     @TempData["Message"]
                 </div>
                 TempData.Clear();

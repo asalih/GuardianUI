@@ -16,6 +16,8 @@ using Guardian.Infrastructure.Repository.Specs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Guardian.Infrastructure.Security;
 using Guardian.Infrastructure.Security.Specs;
+using Microsoft.OpenApi.Models;
+using System.Collections.Generic;
 
 namespace Guardian.Web.UI
 {
@@ -78,8 +80,34 @@ namespace Guardian.Web.UI
 
             services.AddAutoMapper(typeof(Representor).Assembly);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement{
+                    {
+                        new OpenApiSecurityScheme{
+                            Reference = new OpenApiReference{
+                                Id = "Bearer", //The name of the previously defined security scheme.
+                                Type = ReferenceType.SecurityScheme
+                            }
+                        },new List<string>()
+                    }
+                });
+
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Guardian API", Version = "v1" });
+            });
+
             services
-                .AddMvc(opts => opts.EnableEndpointRouting = false)
+                .AddMvcCore(opts => opts.EnableEndpointRouting = false)
+                .AddApiExplorer()
+                .AddViews()
+                .AddRazorViewEngine()
+                .AddDataAnnotations()
                 .AddFluentValidation(cfg =>
                 {
                     cfg.RegisterValidatorsFromAssemblyContaining<Representor>();
@@ -111,6 +139,12 @@ namespace Guardian.Web.UI
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Guardian API V1");
             });
 
             UpdateDatabase(app);
