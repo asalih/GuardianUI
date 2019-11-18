@@ -49,7 +49,7 @@
                         @item.IsActive
                     </td>
                     <td>
-                        <form asp-action="Delete">
+                        <form asp-controller="/FirewallRules" asp-action="Delete" asp-route-id="@item.Id">
                             @Html.Hidden("ruleId", item.Id)
                             <a class="btn btn-sm btn-info" asp-action="Update" asp-route-id="@item.Id">Edit</a>
                             <button class="btn btn-sm btn-danger">Delete</button>

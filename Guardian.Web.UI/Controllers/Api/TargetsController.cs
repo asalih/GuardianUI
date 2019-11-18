@@ -11,7 +11,9 @@ using Guardian.Web.UI.Filters;
 namespace Guardian.Web.UI.Controllers.Api
 {
     [Route("api/[controller]")]
-    public class TargetsController : Controller
+    [ApiController]
+    [ApiAuthorize]
+    public class TargetsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -22,7 +24,6 @@ namespace Guardian.Web.UI.Controllers.Api
 
         // GET: api/<controller>
         [HttpGet]
-        [ApiAuthorize]
         public async Task<QueryListResult<TargetDto>> List(int? limit, int? offset)
         {
             return await _mediator.Send(new List.Query(limit, offset));

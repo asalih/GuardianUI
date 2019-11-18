@@ -27,9 +27,9 @@
                     <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                     <span class="dropdown-menu dropdown-menu-right" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(0px, 31px, 0px);">
                         <a class="dropdown-item" asp-action="Update" asp-route-id="@Model.Id">Edit</a>
-                        <a class="dropdown-item" asp-action="Index" asp-controller="FirewallRules" asp-route-id="@Model.Id">Firewall Rules</a>
+                        <a class="dropdown-item" asp-action="Index" asp-controller="/FirewallRules" asp-route-id="@Model.Id">Firewall Rules</a>
                         <span class="dropdown-divider"></span>
-                        <form asp-action="Delete" class="">
+                        <form asp-controller="/Targets" asp-action="Delete" class="">
                             @Html.Hidden("id", Model.Id)
                             <button class="dropdown-item" type="submit">Delete</button>
                         </form>
