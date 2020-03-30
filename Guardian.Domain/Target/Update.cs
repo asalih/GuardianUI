@@ -57,6 +57,7 @@ namespace Guardian.Domain.Target
                 if (target.Domain != message.Target.Domain)
                 {
                     var ssl = SSLHelper.CreateSSL(message.Target.Domain);
+                    target.Domain = message.Target.Domain;
                 }
 
                 await _repository.Update(target);

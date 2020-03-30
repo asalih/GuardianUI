@@ -16,7 +16,7 @@ jobs:
           command: dotnet cake build.cake --runtime=linux-x64
       - run:
           name: Deploy
-          command: scp -o StrictHostKeyChecking=no -r /root/project/publish/* root@guardian-waf.com://applications/guardianui/
+          command: scp -o StrictHostKeyChecking=no -r /root/project/publish/* root@guardian-waf.com://applications/guardiandash/
       - run:
           name: Service Restart
-          command: ssh root@guardian-waf.com systemctl restart guardianui.service
+          command: ssh root@guardian-waf.com systemctl restart guardiandash.service
