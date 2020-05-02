@@ -18,5 +18,8 @@ jobs:
           name: Deploy
           command: scp -o StrictHostKeyChecking=no -r /root/project/publish/* root@guardian-waf.com://applications/guardiandash/
       - run:
+          name: Deploy Cleanup
+          command: ssh root@guardian-waf.com /applications/guardiandash_deploy_cleanup.sh
+      - run:
           name: Service Restart
           command: ssh root@guardian-waf.com systemctl restart guardiandash.service
