@@ -18,6 +18,7 @@ using Guardian.Infrastructure.Security;
 using Guardian.Infrastructure.Security.Specs;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using Guardian.Domain.FirewallRule.Serialzation;
 
 namespace Guardian.Web.UI
 {
@@ -42,6 +43,7 @@ namespace Guardian.Web.UI
             services.AddScoped(typeof(IFirewallRuleRepository), typeof(FirewallRuleRepository));
             services.AddScoped(typeof(IRuleLogRepository), typeof(RuleLogRepository));
             services.AddScoped(typeof(IHTTPLogRepository), typeof(HTTPLogRepository));
+            services.AddScoped(typeof(IParser), typeof(Parser));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<IIdentityHelper, IdentityHelper>();

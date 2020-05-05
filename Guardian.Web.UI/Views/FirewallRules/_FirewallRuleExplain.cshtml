@@ -3,40 +3,6 @@
 *@
 <div class="alert alert-info">
     <p>
-        You can create custom expression using text contains base, lexical order on strings (<=,<,>
-            ,>=), regex match (=~) and regex not match (!~) like below;
+        Specify Rule as raw.
     </p>
-    <p>
-        http.path == "/example/path" && ip.src == "10.20.30.40" && http.header !~ "User-Agent=(.*)"
-    </p>
-    <p>
-        This rule will block the request if the path is "/example/path" and client's ip address is 10.20.30.40 and no user agent header.
-    </p>
-    <p>
-        Here is the complete model that you can use while writing your custom rule;
-    </p>
-    <ul>
-        <li>
-            ip.src: client's ip address.
-        </li>
-        <li>
-            http.query: raw query string.
-        </li>
-        <li>http.path: request's path.</li>
-        <li>http.host: host header.</li>
-        <li>http.cookie: key value raw cookie. e.g cookie1=value1; cookie2=value2;</li>
-        <li>http.header: key value raw headers.</li>
-        <li>http.method: request's http method.</li>
-        <li>http.protocol: request's protocol.</li>
-    </ul>
-    <p>
-        Also, if you writing rule for responses then you have response object;
-    </p>
-    <ul>
-        <li>response.status: status text of response</li>
-        <li>response.statusCode: status code of response</li>
-        <li>response.cookie: key value raw cookie. e.g cookie1=value1; cookie2=value2;</li>
-        <li>response.header: key value raw headers.</li>
-        <li>response.contentLength: content length of the response.</li>
-    </ul>
 </div>

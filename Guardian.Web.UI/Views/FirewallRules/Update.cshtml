@@ -8,7 +8,7 @@
 <h1>Edit Firewall Rule</h1>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-7">
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="Id" type="hidden" class="form-control" />
@@ -28,16 +28,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Expression" class="control-label"></label>
-                <textarea asp-for="Expression" class="form-control"></textarea>
+                <textarea asp-for="Expression" class="form-control" style="height:250px"></textarea>
                 <span asp-validation-for="Expression" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Action" class="control-label"></label>
-                <select asp-for="Action" class="form-control">
-                    <option value="@Guardian.Infrastructure.Entity.RuleAction.Allow">@Guardian.Infrastructure.Entity.RuleAction.Allow.ToString()</option>
-                    <option value="@Guardian.Infrastructure.Entity.RuleAction.Block">@Guardian.Infrastructure.Entity.RuleAction.Block.ToString()</option>
-                </select>
-                <span asp-validation-for="Action" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
@@ -49,7 +41,7 @@
             </div>
         </form>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-5">
         <partial name="_FirewallRuleExplain.cshtml" />
     </div>
 </div>

@@ -25,9 +25,6 @@ namespace Guardian.Domain.FirewallRule
         [Display(Name = "Rule For")]
         public RuleFor RuleFor { get; set; }
 
-        [Display(Name = "Rule Action")]
-        public RuleAction Action { get; set; }
-
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; }
     }

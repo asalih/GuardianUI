@@ -67,7 +67,6 @@ namespace Guardian.Tests.Domain.Target
             {
                 FirewallRule = new Guardian.Domain.FirewallRule.FirewallRuleDto
                 {
-                    Action = Infrastructure.Entity.RuleAction.Allow,
                     Expression = "exp",
                     IsActive = true,
                     RuleFor = Infrastructure.Entity.RuleFor.Request,

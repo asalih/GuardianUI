@@ -12,9 +12,9 @@ namespace Guardian.Infrastructure.Entity
         public virtual Target Target { get; set; }
         public virtual ICollection<RuleLog> RuleLogs { get; set; }
         public RuleFor RuleFor { get; set; }
-        public RuleAction Action { get; set; }
         public string Title { get; set; }
         public string Expression { get; set; }
+        public string SerializedExpression { get; set; }
         public bool IsActive { get; set; }
     }
 }
