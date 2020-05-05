@@ -67,7 +67,7 @@ namespace Guardian.Tests.Domain.Target
             {
                 FirewallRule = new Guardian.Domain.FirewallRule.FirewallRuleDto
                 {
-                    Expression = "exp",
+                    Expression = "SecRule TX:EXECUTING_PARANOIA_LEVEL \"@lt 1\" \"id:913011,phase:1,pass,nolog,skipAfter:END-REQUEST-913-SCANNER-DETECTION\"",
                     IsActive = true,
                     RuleFor = Infrastructure.Entity.RuleFor.Request,
                     TargetId = targetCreateResult.Result.Id,

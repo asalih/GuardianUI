@@ -73,7 +73,7 @@ namespace Guardian.Domain.FirewallRule.Serialzation
             var chainWait = false;
             while (true)
             {
-                var li = i + 1;
+                var li = i+1;
 
                 if (li >= plainTextRulesLen)
                 {
@@ -211,14 +211,14 @@ namespace Guardian.Domain.FirewallRule.Serialzation
                 var operatorReg = new Regex("@(.*?)(\\s|\\\")", RegexOptions.Compiled);
                 var opMatch = operatorReg.Matches(@operator);
 
-                parsedOperator = opMatch[1].Value.Replace("\"", "");
+                parsedOperator = opMatch[0].Groups[1].Value.Replace("\"", "");
 
-                parsedExpression = parsedOperator.Replace(@operator, "");
-                parsedExpression = parsedExpression.Trim('"', ' ').TrimStart('@', '!', ' ');
+                parsedExpression = @operator.Replace(parsedOperator, "");
+                parsedExpression = parsedExpression.Trim('"', ' ', '\\').TrimStart('@', '!', ' ');
             }
             else
             {
-                parsedExpression = @operator.Trim('"').TrimStart('@', '!', ' ');
+                parsedExpression = @operator.Trim('"', ' ', '\\').TrimStart('@', '!', ' ');
             }
 
             return new Operator
@@ -239,16 +239,16 @@ namespace Guardian.Domain.FirewallRule.Serialzation
             var idRegMatch = idReg.Matches(action);
             var idRegIdentified = "-1";
 
-            if (idRegMatch.Count > 1)
+            if (idRegMatch.Count > 0)
             {
-                idRegIdentified = idRegMatch.ToList()[1].Value;
+                idRegIdentified = idRegMatch.ToList()[0].Groups[1].Value;
             }
             var phaseRegMatch = phaseReg.Matches(action);
             var phaseRegIdentified = 1;
 
-            if (phaseRegMatch.Count > 1)
+            if (phaseRegMatch.Count > 0)
             {
-                phaseRegIdentified = int.Parse(phaseRegMatch.ToList()[1].Value);
+                phaseRegIdentified = int.Parse(phaseRegMatch.ToList()[0].Groups[1].Value);
             }
 
             var disrupAct = DisruptiveAction.Block;

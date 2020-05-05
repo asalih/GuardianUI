@@ -42,6 +42,7 @@ namespace Guardian.Tests
         {
             var startup = new Startup(Config);
             var services = new ServiceCollection();
+            services.AddLogging();
 
             var options = new DbContextOptionsBuilder<GuardianDataContext>()
                .UseInMemoryDatabase(databaseName: DbName)
