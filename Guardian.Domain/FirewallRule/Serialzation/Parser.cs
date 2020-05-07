@@ -193,7 +193,7 @@ namespace Guardian.Domain.FirewallRule.Serialzation
         private Operator ParseOperators(string @operator)
         {
             var isNotOperator = @operator.StartsWith("\"!");
-            var isOperatorSpec = false;
+            bool isOperatorSpec;
 
             if (isNotOperator)
             {
@@ -204,7 +204,7 @@ namespace Guardian.Domain.FirewallRule.Serialzation
                 isOperatorSpec = @operator.StartsWith("\"@");
             }
             var parsedOperator = "rx";
-            var parsedExpression = "";
+            string parsedExpression;
 
             if (isOperatorSpec)
             {
