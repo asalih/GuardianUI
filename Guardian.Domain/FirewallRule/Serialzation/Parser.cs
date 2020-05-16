@@ -89,7 +89,6 @@ namespace Guardian.Domain.FirewallRule.Serialzation
                 {
                     if (chainWait)
                     {
-                        chainWait = false;
                         (chainRule, i) = Walk(plainTextRules, li, plainTextRulesLen);
                     }
                     break;
