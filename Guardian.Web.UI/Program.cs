@@ -13,7 +13,6 @@ namespace Guardian.Web.UI
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://*:5000", "https://*:5001")
                 .UseStartup<Startup>();
     }
 }
